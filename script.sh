@@ -1,5 +1,6 @@
 bans=()
 
+
 for FILE in `ls`
 do
     if test -d $FILE
