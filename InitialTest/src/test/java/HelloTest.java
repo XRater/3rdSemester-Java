@@ -6,7 +6,7 @@ class HelloTest {
 
     @Test
     public void testFoo() {
-        assertTrue(true);
+        assertTrue(false);
     }
 
 
