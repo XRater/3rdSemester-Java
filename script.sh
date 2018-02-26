@@ -16,8 +16,7 @@ do
         then
             echo "$FILE"
             cd "$FILE"
-            result= ./gradlew build
-            if ${result}
+            if ./gradlew build
             then
                 cd ../
             else 
