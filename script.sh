@@ -1,6 +1,5 @@
 bans=()
 
-
 for FILE in `ls`
 do
     if test -d $FILE
@@ -17,7 +16,8 @@ do
         then
             echo "$FILE"
             cd "$FILE"
-            if gradle build
+            result= ./gradlew build
+            if ${result}
             then
                 cd ../
             else 
