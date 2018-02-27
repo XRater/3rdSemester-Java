@@ -49,7 +49,8 @@ public class LazyFactory {
             this.supplier = supplier;
         }
 
-        // as I see, if there is no description the one from the interface will be shown
+        // as i see, if there is no description the one from the interface will be shown
+        // it looks more beautiful then the link in my opinion
         @Override
         public T get() {
             if (supplier != null) {
