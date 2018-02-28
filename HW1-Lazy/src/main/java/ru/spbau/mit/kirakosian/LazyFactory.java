@@ -1,11 +1,14 @@
 package ru.spbau.mit.kirakosian;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Supplier;
 
 /**
  * Factory class to produce different ru.spbau.mit.kirakosian.Lazy classes. Unsynchronized and synchronized versions
  * are supported.
  */
+@SuppressWarnings("WeakerAccess")
 public class LazyFactory {
 
     /**
@@ -42,10 +45,11 @@ public class LazyFactory {
      */
     private static class LazyUnsync<T> implements Lazy<T> {
 
+        @Nullable
         private Supplier<T> supplier;
         private T value;
 
-        LazyUnsync(final Supplier<T> supplier) {
+        LazyUnsync(@Nullable final Supplier<T> supplier) {
             this.supplier = supplier;
         }
 
@@ -68,10 +72,11 @@ public class LazyFactory {
      */
     private static class LazySync<T> implements Lazy<T> {
 
+        @Nullable
         private Supplier<T> supplier;
         private T value;
 
-        LazySync(final Supplier<T> supplier) {
+        LazySync(@Nullable final Supplier<T> supplier) {
             this.supplier = supplier;
         }
 
