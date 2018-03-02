@@ -2,10 +2,7 @@ package tasks;
 
 import java.util.function.Supplier;
 
-public interface LightFuture<T> {
+public interface LightFuture<T> extends Runnable {
 
     boolean isReady();
-
-    T get();
-
 }

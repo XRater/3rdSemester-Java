@@ -1,12 +1,27 @@
 package tasks;
 
+import java.util.function.Supplier;
+
 @SuppressWarnings("WeakerAccess")
-public abstract class Task implements Runnable {
+public class Task<T> implements LightFuture<T> {
 
-    protected static int counter;
+    private final Supplier<T> supplier;
 
-    Task() {
-        counter++;
+    private boolean ready;
+    private T value;
+
+    public Task(final Supplier<T> supplier) {
+        this.supplier = supplier;
     }
 
+    @Override
+    public boolean isReady() {
+        return ready;
+    }
+
+    @Override
+    public void run() {
+        value = supplier.get();
+        ready = true;
+    }
 }

@@ -1,9 +1,9 @@
 public class Utils {
 
-    public static void sleep(int time) {
+    public static void sleep(final int time) {
         try {
             Thread.sleep(time);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -1,8 +1,11 @@
+import tasks.LightFuture;
+
 import java.util.concurrent.BlockingQueue;
+import java.util.function.Supplier;
 
 public interface ThreadPool {
 
-    void addTask(Runnable task);
+    <T> LightFuture<T> addTask(Supplier<T> supplier);
 
     void shutdown();
 }
