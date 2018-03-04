@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ *
+ */
 @SuppressWarnings("WeakerAccess")
 public class ThreadPoolFactory {
 
@@ -41,6 +44,9 @@ public class ThreadPoolFactory {
             }
         }
 
+        /**
+         * {@link ThreadPool#shutdown()}
+         */
         @Override
         public synchronized void shutdown() {
             if (isWorking) { // otherwise, we may do this section twice
@@ -51,6 +57,9 @@ public class ThreadPoolFactory {
             isWorking = false;
         }
 
+        /**
+         * {@link ThreadPool#waitWithShutDown()}
+         */
         @Override
         public void waitWithShutDown() {
             shutdown();
@@ -65,6 +74,9 @@ public class ThreadPoolFactory {
             }
         }
 
+        /**
+         * {@link ThreadPool#addTask(Supplier)}
+         */
         @Override
         public synchronized <T> LightFuture<T> addTask(final Supplier<T> supplier) {
             if (!isWorking) {
@@ -79,8 +91,11 @@ public class ThreadPoolFactory {
             return task;
         }
 
-        // it is possible to use lambda function instead of this class,
-        // but constructor would be way to massive in that case.
+        /**
+         * Default task for every thread in the thread pool.
+         *
+         * Taking tasks from the queue until thread pool is working.
+         */
         private class ThreadTask implements Runnable {
 
             @Override
