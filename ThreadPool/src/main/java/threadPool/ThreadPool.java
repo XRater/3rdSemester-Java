@@ -10,4 +10,6 @@ public interface ThreadPool {
     <T> LightFuture<T> addTask(Supplier<T> supplier);
 
     void shutdown();
+
+    void waitWithShutDown();
 }

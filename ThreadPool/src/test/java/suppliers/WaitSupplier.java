@@ -1,7 +1,5 @@
 package suppliers;
 
-import java.util.function.Supplier;
-
 public class WaitSupplier extends SupplierBase<Void> {
 
     @Override

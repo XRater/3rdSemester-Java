@@ -44,8 +44,6 @@ class Task<T> implements LightFuture<T>, Runnable {
         return value;
     }
 
-
-
     @Override
     public synchronized void run() {
         if (!ready) { // we may execute every task only one time
