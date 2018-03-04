@@ -1,6 +1,9 @@
+package threadPool;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
+@SuppressWarnings("WeakerAccess")
 public class BlockingQueue<T> {
 
     private final Queue<T> tasks = new LinkedList<>();

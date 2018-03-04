@@ -2,17 +2,20 @@ import org.junit.jupiter.api.Test;
 import suppliers.NotifySupplier;
 import suppliers.SleepSupplier;
 import suppliers.WaitSupplier;
-import tasks.LightFuture;
+import threadPool.LightFuture;
+import threadPool.ThreadPool;
+import threadPool.ThreadPoolFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("FieldCanBeLocal")
 class ThreadPoolFactoryTest {
 
     private final int testsNumber = 10;
-    private int maxThreadsNumber = 10;
+    private final int maxThreadsNumber = 10;
 
     @Test
     void testALotOfThreads() {
@@ -38,15 +41,6 @@ class ThreadPoolFactoryTest {
         for (final LightFuture<Void> lightFuture : list) {
             assertTrue(lightFuture.isReady());
         }
-    }
-
-    public static void main(final String[] args) {
-        final ThreadPool threadPool = ThreadPoolFactory.initThreadPool(2);
-        threadPool.addTask(new SleepSupplier());
-        threadPool.addTask(new SleepSupplier());
-        threadPool.addTask(new SleepSupplier());
-        threadPool.addTask(new SleepSupplier());
-        threadPool.shutdown();
     }
 
 }

@@ -1,5 +1,6 @@
-import tasks.LightFuture;
-import tasks.Task;
+package threadPool;
+
+import threadPool.exceptions.ThreadPoolIsTurnedDownException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ThreadPoolFactory {
         private ThreadPoolImpl(final int threadsNumber) {
             this.threadsNumber = threadsNumber;
             for (int i = 0; i < threadsNumber; i++) {
-                threads.add(new Thread(new ThreadPoolTask()));
+                threads.add(new Thread(new ThreadTask()));
             }
             for (final Thread thread : threads) {
                 thread.start();
@@ -33,8 +34,10 @@ public class ThreadPoolFactory {
 
         @Override
         public synchronized void shutdown() {
-            for (int i = 0; i < threadsNumber; i++) {
-                addTask(POISON_PILL);
+            if (isWorking) { // otherwise, we may do this section twice
+                for (int i = 0; i < threadsNumber; i++) {
+                    addTask(POISON_PILL);
+                }
             }
             isWorking = false;
         }
@@ -44,12 +47,14 @@ public class ThreadPoolFactory {
             if (!isWorking) {
                 throw new ThreadPoolIsTurnedDownException();
             }
-            final LightFuture<T> lightFuture = new Task<>(supplier);
-            tasks.push(lightFuture);
-            return lightFuture;
+            final Task<T> task = new Task<>(supplier);
+            tasks.push(task);
+            return task;
         }
 
-        private class ThreadPoolTask implements Runnable {
+        // it is possible to use lambda function instead of this class,
+        // but constructor would be way to massive in that case.
+        private class ThreadTask implements Runnable {
 
             @Override
             public void run() {
