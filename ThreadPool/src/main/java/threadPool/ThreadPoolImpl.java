@@ -11,13 +11,13 @@ import java.util.function.Supplier;
 
 /**
  * {@link ThreadPool}
- *
+ * <p>
  * Basic ThreadPool interface implementation.
- *
+ * <p>
  * This class supports safe work in concurrent environment. Class is not visible outside
  * from the package, therefore it is possible to work with only with public methods
  * of {@link ThreadPool} interface.
- *
+ * <p>
  * In general, this pool supports only tasks, which implements LightFuture interface,
  * but there is an easy way to work with any Runnable tasks, therefore blocking queue
  * inside of the class stores any kind of Runnable classes.
@@ -73,7 +73,7 @@ class ThreadPoolImpl implements ThreadPool {
                 try {
                     shutDownLock.wait();
                 } catch (final InterruptedException e) {
-//                         do nothing
+                    // do nothing
                 }
             }
         }
@@ -98,7 +98,7 @@ class ThreadPoolImpl implements ThreadPool {
 
     /**
      * Default task for every thread in the thread pool.
-     *
+     * <p>
      * Taking tasks from the queue until thread pool is working.
      */
     private class ThreadTask implements Runnable {
@@ -125,14 +125,14 @@ class ThreadPoolImpl implements ThreadPool {
      * Simple LightFuture interface implementation, that may be used inside
      * ThreadPoolImpl class. This class is not visible from outside, therefore you are
      * not able to work with this class directly.
-     *
+     * <p>
      * Public interface of this class is safe in concurrent environment.
-     *
+     * <p>
      * Talking about not visible for user interface (such as method run, that is not
      * visible with the interface LightFuture) it is expected, that programmer
      * works safe with this methods (for example, calls run method twice). If there was
      * any mistake in the code, TaskIsReadyAlreadyException is expected to be thrown.
-     *
+     * <p>
      * If an exception occurred during the task execution this exception will be stored
      * inside of the class and passed to every future calculations (thenApply method).
      * In case of trying to get result of the failed calculation or execute any
@@ -155,7 +155,7 @@ class ThreadPoolImpl implements ThreadPool {
         /**
          * Task is ready if it execution was ended by any thread. It does not matter
          * either it was successful or not (ended with an exception).
-         *
+         * <p>
          * {@link LightFuture#isReady()}
          *
          * @return true if task was already completed and false otherwise.
@@ -168,10 +168,10 @@ class ThreadPoolImpl implements ThreadPool {
         /**
          * Returns the value of the calculation. If calculation is not ready yet, waits
          * for its end and then returns the result.
-         *
+         * <p>
          * If there was an error during execution LightExecutionException with
          * cause of the fail inside will be thrown.
-         *
+         * <p>
          * {@link LightFuture#get()}
          *
          * @return result of the calculation.
@@ -207,7 +207,7 @@ class ThreadPoolImpl implements ThreadPool {
          * Inner method of class. Should not be visible from outside (of course it is
          * possible to call this method with cast of this object to Runnable,
          * but let us think that it is a user problem).
-         *
+         * <p>
          * This method is called, when thread from the pool staring to execute this task.
          * Runnable interface is supported for this very reason.
          */

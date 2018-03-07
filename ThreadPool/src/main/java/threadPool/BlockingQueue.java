@@ -5,7 +5,7 @@ import java.util.Queue;
 
 /**
  * This class provides safe concurrent queue.
- *
+ * <p>
  * In other words, this class is a wrapper around simple queue class,
  * but in addition every action in concurrent program will be safe, that means,
  * that you are not able to override any values in your queue, or to take
