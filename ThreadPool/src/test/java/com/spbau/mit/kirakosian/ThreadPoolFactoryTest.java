@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ThreadPoolFactoryTest {
 
     private final int testsNumber = 100;
-    private final int maxThreadsNumber = 10;
+    private final int maxThreadsNumber = 20;
 
     /**
      * This test checks if every task was executed exactly one time.
