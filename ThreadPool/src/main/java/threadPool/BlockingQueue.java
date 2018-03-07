@@ -1,5 +1,8 @@
 package threadPool;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -35,12 +38,13 @@ public class BlockingQueue<T> {
      *
      * @return top item of the queue.
      */
+    @Nullable
     public T pop() {
         synchronized (tasks) {
             while (tasks.isEmpty()) {
                 try {
                     tasks.wait();
-                } catch (final InterruptedException e) {
+                } catch (@NotNull final InterruptedException e) {
                     // do nothing
                 }
             }

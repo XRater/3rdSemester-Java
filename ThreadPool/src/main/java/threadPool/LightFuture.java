@@ -3,8 +3,24 @@ package threadPool;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * This interface provides methods for convenient tracking of your tasks.
+ * <p>
+ * For example, you may check if execution of the task already has ended with
+ * {@link LightFuture#isReady()}, get result of the calculation at any time (task
+ * may be not finished yet) or add new tasks with dependency on the result of the
+ * calculation.
+ *
+ * @param <T>
+ */
 public interface LightFuture<T> extends Supplier<T> {
 
+    /**
+     * The method cheks if any the task was already executed. Task may end
+     * with an error, this method still will return true.
+     *
+     * @return true if task was finished already and false otherwise.
+     */
     boolean isReady();
 
     /**

@@ -1,6 +1,8 @@
 package suppliers;
 
-public class CounterSupplier extends SupplierBase<Void> {
+import org.jetbrains.annotations.Nullable;
+
+public class CounterSupplier extends BaseSupplier<Void> {
 
     private static int counter;
     private int myCounter;
@@ -9,6 +11,7 @@ public class CounterSupplier extends SupplierBase<Void> {
         return counter;
     }
 
+    @Nullable
     @Override
     public Void get() {
         synchronized (this) {

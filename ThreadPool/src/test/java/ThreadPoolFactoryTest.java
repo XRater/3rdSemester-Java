@@ -1,12 +1,14 @@
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import suppliers.CounterSupplier;
-import suppliers.NotifySupplier;
-import suppliers.SleepSupplier;
-import suppliers.WaitSupplier;
+import suppliers.*;
 import threadPool.LightFuture;
 import threadPool.ThreadPool;
 import threadPool.ThreadPoolFactory;
+import threadPool.Utils;
+import threadPool.exceptions.LightExecutionException;
+import threadPool.exceptions.ThreadPoolIsTurnedDownException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ class ThreadPoolFactoryTest {
      * This test checks if every task was executed exactly one time.
      */
     @Test
-    void testSimple() {
+    void testCallEveryTaskOnce() {
         for (int t = 0; t < testsNumber; t++) {
             final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
             final List<CounterSupplier> list = new LinkedList<>();
@@ -88,7 +90,7 @@ class ThreadPoolFactoryTest {
                 // for it in lambda... What should I do with it?
                 // Here I will hope that at least one test will fail.
                 wait();
-            } catch (final InterruptedException e) {
+            } catch (@NotNull final InterruptedException e) {
                 // do nothing
             }
             // Am i right that timer cannot still work?
@@ -103,4 +105,93 @@ class ThreadPoolFactoryTest {
         }
     }
 
+    @Test
+    void testIsReady() {
+        final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
+        final LightFuture<Void> future = pool.addTask(new SleepSupplier(250));
+        pool.addTask(new SleepSupplier());
+
+        assertFalse(future.isReady());
+        new Thread(() -> assertFalse(future.isReady())).start();
+        Utils.sleep(500);
+        assertTrue(future.isReady());
+        new Thread(() -> assertTrue(future.isReady())).start();
+    }
+
+    @Test
+    void testGet() {
+        final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
+
+        final ArrayList<LightFuture<Integer>> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(pool.addTask(new IntegerSupplier(i * i)));
+        }
+
+        final Runnable r = () -> {
+            for (int i = 0; i < 10; i++) {
+                assertEquals(Integer.valueOf(i * i), list.get(i).get());
+            }
+        };
+        new Thread(r).start();
+        new Thread(r).start();
+        new Thread(r).start();
+        r.run();
+    }
+
+    @Test
+    void testShutDown() {
+        final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
+        final ArrayList<LightFuture<Void>> list = new ArrayList<>();
+
+        list.add(pool.addTask(new SleepSupplier()));
+        list.add(pool.addTask(new SleepSupplier()));
+        list.add(pool.addTask(new SleepSupplier()));
+
+        pool.shutdown();
+
+        assertThrows(ThreadPoolIsTurnedDownException.class,
+                () -> pool.addTask(new IntegerSupplier(1)));
+
+        pool.waitWithShutDown();
+
+        for (final LightFuture<Void> future : list) {
+            assertTrue(future.isReady());
+        }
+    }
+
+    @Test
+    void testExceptions() {
+        final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
+        final LightFuture<Void> task = pool.addTask(() -> {
+            throw new RuntimeException();
+        });
+
+        final Runnable check = () -> {
+            assertThrows(LightExecutionException.class, task::get);
+            assertThrows(LightExecutionException.class,
+                    () -> task.thenApply(o -> 1).get());
+        };
+
+        check.run();
+        new Thread(check).start();
+        new Thread(check).start();
+    }
+
+    @Test
+    void testThenApply() {
+        final ThreadPool pool = ThreadPoolFactory.initThreadPool(3);
+
+        final LightFuture<Integer> task = pool.addTask(() -> 1);
+        for (int i = 0; i < 5; i++) {
+            pool.addTask(new SleepSupplier());
+        }
+
+        final Runnable r = () -> assertEquals(Integer.valueOf(2), task.thenApply(n -> n + 1).get());
+        r.run();
+        new Thread(r).start();
+        new Thread(r).start();
+        new Thread(r).start();
+
+        pool.waitWithShutDown();
+    }
 }

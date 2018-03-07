@@ -1,5 +1,7 @@
 package threadPool;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import threadPool.exceptions.LightExecutionException;
 import threadPool.exceptions.TaskIsReadyAlreadException;
 import threadPool.exceptions.ThreadPoolIsTurnedDownException;
@@ -24,7 +26,9 @@ import java.util.function.Supplier;
  */
 class ThreadPoolImpl implements ThreadPool {
 
+    @Nullable
     private final Supplier<Void> POISON_PILL = () -> null;
+    @Nullable
     private final Task<Void> POISON_PILL_TASK = new Task<>(POISON_PILL);
 
     // Locks
@@ -45,6 +49,7 @@ class ThreadPoolImpl implements ThreadPool {
             threads.add(new Thread(new ThreadTask()));
         }
         for (final Thread thread : threads) {
+            thread.setDaemon(true);
             thread.start();
         }
     }
@@ -72,7 +77,7 @@ class ThreadPoolImpl implements ThreadPool {
             while (threadsStillWorking != 0) {
                 try {
                     shutDownLock.wait();
-                } catch (final InterruptedException e) {
+                } catch (@NotNull final InterruptedException e) {
                     // do nothing
                 }
             }
@@ -82,6 +87,7 @@ class ThreadPoolImpl implements ThreadPool {
     /**
      * {@link ThreadPool#addTask(Supplier)}
      */
+    @Nullable
     @Override
     public synchronized <T> LightFuture<T> addTask(final Supplier<T> supplier) {
         if (!isWorking) {
@@ -116,7 +122,9 @@ class ThreadPoolImpl implements ThreadPool {
                     }
                     break;
                 }
-                task.run();
+                if (task != null) { // there was a warning, so it is better to check for sure
+                    task.run();
+                }
             }
         }
     }
@@ -182,7 +190,7 @@ class ThreadPoolImpl implements ThreadPool {
                 while (!ready) { // waiting for result
                     try {
                         wait();
-                    } catch (final InterruptedException e) {
+                    } catch (@NotNull final InterruptedException e) {
                         // nothing to do here
                     }
                 }
@@ -197,8 +205,9 @@ class ThreadPoolImpl implements ThreadPool {
         /**
          * {@link LightFuture#thenApply(Function)}
          */
+        @Nullable
         @Override
-        public <U> LightFuture<U> thenApply(final Function<T, ? extends U> f) {
+        public <U> LightFuture<U> thenApply(@NotNull final Function<T, ? extends U> f) {
             final Supplier<U> supplier = () -> f.apply(Task.this.get());
             return addTask(supplier);
         }
@@ -216,7 +225,7 @@ class ThreadPoolImpl implements ThreadPool {
             if (!ready) { // we may execute every task only one time
                 try {
                     value = supplier.get();
-                } catch (final Exception e) {
+                } catch (@NotNull final Exception e) {
                     error = e;
                 }
                 ready = true;

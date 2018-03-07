@@ -1,13 +1,10 @@
 package threadPool;
 
-import threadPool.exceptions.ThreadPoolIsTurnedDownException;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Supplier;
-
 /**
+ *  Class with factory methods to create ThreadPool interface classes.
  *
+ *  By this class we hide out {@link ThreadPoolImpl} class and show only
+ *  {@link ThreadPool} interface.
  */
 @SuppressWarnings("WeakerAccess")
 public class ThreadPoolFactory {

@@ -1,13 +1,17 @@
 package suppliers;
 
-public class WaitSupplier extends SupplierBase<Void> {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+public class WaitSupplier extends BaseSupplier<Void> {
+
+    @Nullable
     @Override
     public Void get() {
         synchronized (commonLock) {
             try {
                 commonLock.wait();
-            } catch (final InterruptedException e) {
+            } catch (@NotNull final InterruptedException e) {
                 //do nothing
             }
         }

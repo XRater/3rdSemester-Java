@@ -1,16 +1,24 @@
 package suppliers;
 
-import com.google.common.base.Supplier;
+import org.jetbrains.annotations.Nullable;
+import threadPool.Utils;
 
-public class SleepSupplier extends SupplierBase<Void> {
+public class SleepSupplier extends BaseSupplier<Void> {
 
+    private int time = 100;
+
+    public SleepSupplier() {
+
+    }
+
+    public SleepSupplier(final int time) {
+        this.time = time;
+    }
+
+    @Nullable
     @Override
     public Void get() {
-        try {
-            Thread.sleep(100);
-        } catch (final InterruptedException e) {
-            // do nothing
-        }
+        Utils.sleep(time);
         return null;
     }
 }

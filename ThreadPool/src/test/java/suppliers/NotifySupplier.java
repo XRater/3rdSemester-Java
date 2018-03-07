@@ -1,7 +1,10 @@
 package suppliers;
 
-public class NotifySupplier extends SupplierBase<Void> {
+import org.jetbrains.annotations.Nullable;
 
+public class NotifySupplier extends BaseSupplier<Void> {
+
+    @Nullable
     @Override
     public Void get() {
         synchronized (commonLock) {
