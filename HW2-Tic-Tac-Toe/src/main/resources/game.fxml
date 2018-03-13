@@ -8,8 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.lang.Double?>
-<StackPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-    stylesheets="tic-tac-toe.css">
+<?import javafx.scene.canvas.Canvas?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           stylesheets="tic-tac-toe.css" fx:controller="controllers.GameController">
 
     <fx:define>
         <Double fx:id="mainAnchor" fx:value="20"/>
@@ -23,15 +24,11 @@
 
     <BorderPane maxHeight="500" maxWidth="500" minWidth="200" minHeight="200">
         <center>
-            <GridPane fx:id="table" maxWidth="Infinity" maxHeight="Infinity"
-                      GridPane.rowIndex="1"
+            <GridPane alignment="CENTER" fx:id="table"
+                      maxWidth="Infinity" maxHeight="Infinity" GridPane.rowIndex="1"
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"
                       minWidth="$gridSize" minHeight="$gridSize" VBox.vgrow="ALWAYS"
                       stylesheets="tic-tac-toe.css" styleClass="grid">
-                <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0"
-                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
-                           minWidth="$cellSize" minHeight="$cellSize"
-                           stylesheets="tic-tac-toe.css" styleClass="cell"/>
                 <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            minWidth="$cellSize" minHeight="$cellSize"
@@ -75,7 +72,8 @@
                 <padding>
                     <Insets top="10" left="10" right="10" bottom="10"/>
                 </padding>
-                <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.hgrow="ALWAYS"/>
+                <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.hgrow="ALWAYS"
+                onMouseClicked="#click"/>
                 <Button GridPane.columnIndex="1" maxWidth="Infinity" GridPane.hgrow="ALWAYS"/>
                 <Button GridPane.columnIndex="2" maxWidth="Infinity" GridPane.hgrow="ALWAYS"/>
             </GridPane>
