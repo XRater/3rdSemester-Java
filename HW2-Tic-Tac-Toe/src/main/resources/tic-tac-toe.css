@@ -11,13 +11,6 @@
     -fx-background-image: url("background.jpg");
 }
 
-.cross {
-    -fx-font-size: 30pt;
-    -fx-font-family: 'Permanent Marker', cursive;
-    -fx-text-fill: indianred;
-    -fx-opacity: 1;
-}
-
 .nought {
     -fx-font-size: 30pt;
     -fx-font-family: 'Permanent Marker', cursive;
@@ -26,7 +19,7 @@
 }
 
 .grid {
-    -fx-border-radius: 1pt;
+    -fx-border-width: 1pt;
     -fx-border-color: black;
 }
 
@@ -35,4 +28,6 @@
     -fx-border-color: black;
     -fx-background-color: white;
     -fx-alignment: center;
+    -fx-max-height: infinity;
+    -fx-max-width: infinity;
 }

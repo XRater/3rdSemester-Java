@@ -1,37 +1,56 @@
 package controllers;
 
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.Model;
+import view.View;
 
-public class GameController {
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    public GridPane table;
+public class GameController implements Initializable {
+
+    @FXML private GridPane table;
+
     private Model model;
 
-    public void initialize() {
+    @Override
+    public void initialize(final URL location, final ResourceBundle resources) {
         setFieldListeners();
+        model = new Model(initView());
+    }
 
-        model = new Model();
+    private View initView() {
+        final StackPane[][] grid = new StackPane[3][3];
+        for (final Node node : table.getChildren()) {
+            if (node instanceof StackPane) {
+                final StackPane stackPane = (StackPane) node;
+                final int x = GridPane.getColumnIndex(stackPane);
+                final int y = GridPane.getRowIndex(stackPane);
+                grid[x][y] = stackPane;
+            }
+        }
+        return new View(grid);
     }
 
     private void setFieldListeners() {
         for (final Node node : table.getChildren()) {
             if (node instanceof StackPane) {
                 final StackPane stackPane = (StackPane) node;
-                stackPane.setOnMouseReleased(event -> {
-                    final int x = GridPane.getColumnIndex(stackPane);
-                    final int y = GridPane.getRowIndex(stackPane);
-                    model.turn(x, y);
-                });
+                final int x = GridPane.getColumnIndex(stackPane);
+                final int y = GridPane.getRowIndex(stackPane);
+                stackPane.setOnMouseReleased(event -> model.turn(x, y));
             }
         }
     }
 
-    public void click(final MouseEvent mouseEvent) {
+    @FXML public void click(MouseEvent mouseEvent) {
         System.out.println("Game");
         Controller.changeScene(Controller.SceneEnum.MENU);
     }
+
 }

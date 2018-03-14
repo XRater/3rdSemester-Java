@@ -13,8 +13,10 @@ public class Main extends Application {
         primaryStage.setTitle("Tic-tac-toe");
 
         Controller.initialize(primaryStage);
-        Controller.changeScene(Controller.SceneEnum.MENU);
-
+        Controller.changeScene(Controller.SceneEnum.GAME);
+//        Parent root = FXMLLoader.load(getClass().getResource("test.fxml"));
+//        Scene scene = new Scene(root, 300, 400);
+//        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

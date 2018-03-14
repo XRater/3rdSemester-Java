@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="TestController" stylesheets="tic-tac-toe.css">
+
+    <ImageView styleClass="cell-image"/>
+
+    <center>
+        <ScrollPane fx:id="img_pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Canvas fx:id="img" height="286.0" width="355.0"/>
+        </ScrollPane>
+    </center>
+</BorderPane>
