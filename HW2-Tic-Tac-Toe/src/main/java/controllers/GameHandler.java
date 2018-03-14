@@ -63,6 +63,6 @@ public class GameHandler implements Handler {
 
     @FXML public void onExit() {
         model.clear();
-        SceneManager.changeScene(SceneManager.SceneEnum.MENU);
+        SceneManager.changeScene(SceneManager.SceneEnum.MAIN_MENU);
     }
 }

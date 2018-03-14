@@ -10,13 +10,15 @@ import java.io.IOException;
 public class SceneManager {
 
     public enum SceneEnum {
-        GAME, MENU
+        GAME, MAIN_MENU, MODE_MENU, BOT_MENU
     }
 
     private static Stage stage;
 
     private static final LazyScene gameScene = new LazyScene("../game.fxml");
-    private static final LazyScene menuScene = new LazyScene("../menu.fxml");
+    private static final LazyScene mainMenuScene = new LazyScene("../mainMenu.fxml");
+    private static final LazyScene modeMenuScene = new LazyScene("../modeMenu.fxml");
+    private static final LazyScene botMenuScene = new LazyScene("../botMenu.fxml");
 
     public static void initialize(final Stage primaryStage) {
         stage = primaryStage;
@@ -30,9 +32,17 @@ public class SceneManager {
                 newScene = gameScene.getScene();
                 newHandler = gameScene.getHandler();
                 break;
-            case MENU:
-                newScene = menuScene.getScene();
-                newHandler = menuScene.getHandler();
+            case MAIN_MENU:
+                newScene = mainMenuScene.getScene();
+                newHandler = mainMenuScene.getHandler();
+                break;
+            case MODE_MENU:
+                newScene = modeMenuScene.getScene();
+                newHandler = modeMenuScene.getHandler();
+                break;
+            case BOT_MENU:
+                newScene = botMenuScene.getScene();
+                newHandler = botMenuScene.getHandler();
                 break;
         }
         final double width = stage.getWidth();

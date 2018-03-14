@@ -3,6 +3,7 @@ package game;
 import game.gameTypes.MultiPlayerGameType;
 import game.gameTypes.SinglePlayerGameType;
 
+@SuppressWarnings("WeakerAccess")
 public class GameConfig {
 
     private static final GameOptions MULTI_PLAYER_GAME_TYPE = new MultiPlayerGameType();
