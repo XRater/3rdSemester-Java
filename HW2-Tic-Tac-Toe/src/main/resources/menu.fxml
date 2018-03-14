@@ -2,15 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.*?>
 <?import java.lang.Double?>
-<?import javafx.scene.layout.RowConstraints?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           stylesheets="tic-tac-toe.css" fx:controller="controllers.MenuController">
+<StackPane fx:id="mainMenu" xmlns:fx="http://javafx.com/fxml"
+           stylesheets="tic-tac-toe.css" fx:controller="controllers.MenuHandler">
 
     <fx:define>
         <Double fx:id="mainAnchor" fx:value="60"/>
@@ -33,9 +28,11 @@
                 <Button alignment="CENTER" maxWidth="Infinity" text="New Game"
                    GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" onMouseClicked="#onNewGame"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
-                    GridPane.rowIndex="1" GridPane.hgrow="ALWAYS"/>
+                    GridPane.rowIndex="1" GridPane.hgrow="ALWAYS"
+                        text="Single Player" onMouseClicked="#onNewSingleGame"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
-                        GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"/>
+                        GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"
+                        text="Exit" onMouseClicked="#onExit" cancelButton="true"/>
             </GridPane>
         </center>
     </BorderPane>

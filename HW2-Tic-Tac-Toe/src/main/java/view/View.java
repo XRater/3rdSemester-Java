@@ -1,9 +1,9 @@
 package view;
 
+import game.model.Cell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import model.Cell;
 
 public class View {
 
@@ -25,6 +25,9 @@ public class View {
                 break;
             case O:
                 imageView.setImage(O);
+                break;
+            default:
+                imageView.setImage(null);
         }
     }
 }

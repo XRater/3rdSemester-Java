@@ -1,4 +1,4 @@
-import controllers.Controller;
+import controllers.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -12,11 +12,8 @@ public class Main extends Application {
         primaryStage.setMinHeight(400);
         primaryStage.setTitle("Tic-tac-toe");
 
-        Controller.initialize(primaryStage);
-        Controller.changeScene(Controller.SceneEnum.GAME);
-//        Parent root = FXMLLoader.load(getClass().getResource("test.fxml"));
-//        Scene scene = new Scene(root, 300, 400);
-//        primaryStage.setScene(scene);
+        SceneManager.initialize(primaryStage);
+        SceneManager.changeScene(SceneManager.SceneEnum.MENU);
         primaryStage.show();
     }
 

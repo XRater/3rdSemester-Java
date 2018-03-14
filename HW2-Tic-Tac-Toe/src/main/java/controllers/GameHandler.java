@@ -1,19 +1,20 @@
 package controllers;
 
+import game.GameConfig;
+import game.model.Model;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import model.Model;
 import view.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GameController implements Initializable {
+public class GameHandler implements Handler {
 
+    @FXML public StackPane gameScreen;
     @FXML private GridPane table;
 
     private Model model;
@@ -22,6 +23,18 @@ public class GameController implements Initializable {
     public void initialize(final URL location, final ResourceBundle resources) {
         setFieldListeners();
         model = new Model(initView());
+
+        gameScreen.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                onExit();
+            }
+        });
+    }
+
+    @Override
+    public void onShow() {
+        System.out.println("Start");
+        model.initialize(GameConfig.getOptions());
     }
 
     private View initView() {
@@ -48,9 +61,8 @@ public class GameController implements Initializable {
         }
     }
 
-    @FXML public void click(MouseEvent mouseEvent) {
-        System.out.println("Game");
-        Controller.changeScene(Controller.SceneEnum.MENU);
+    @FXML public void onExit() {
+        model.clear();
+        SceneManager.changeScene(SceneManager.SceneEnum.MENU);
     }
-
 }

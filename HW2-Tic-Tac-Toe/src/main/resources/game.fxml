@@ -5,16 +5,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.Double?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           stylesheets="tic-tac-toe.css" fx:controller="controllers.GameController">
+<StackPane fx:id="gameScreen" xmlns:fx="http://javafx.com/fxml"
+           stylesheets="tic-tac-toe.css" fx:controller="controllers.GameHandler">
 
     <fx:define>
         <Double fx:id="mainAnchor" fx:value="20"/>
         <Double fx:id="cellSize" fx:value="1E1"/>
         <Double fx:id="gridSize" fx:value="3E1"/>
     </fx:define>
-
-    <!--<Canvas fx:id="img"> </Canvas>-->
 
     <padding>
         <Insets right="$mainAnchor" left="$mainAnchor" top="$mainAnchor" bottom="$mainAnchor"/>
@@ -40,37 +38,37 @@
                 <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0"
                         GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                         stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="0" GridPane.rowIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="0" GridPane.rowIndex="2"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1" GridPane.rowIndex="2"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="0"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
@@ -80,19 +78,23 @@
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="2"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
         </GridPane>
         </center>
         <bottom>
-            <GridPane alignment="CENTER" maxWidth="Infinity" GridPane.hgrow="ALWAYS" hgap="10">
+            <GridPane alignment="CENTER" hgap="20">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="10.0" percentWidth="40" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="10.0" percentWidth="40" hgrow="SOMETIMES"/>
+                </columnConstraints>
                 <padding>
-                    <Insets top="10" left="10" right="10" bottom="10"/>
+                    <Insets top="15"/>
                 </padding>
-                <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.hgrow="ALWAYS"
-                onMouseClicked="#click"/>
-                <Button GridPane.columnIndex="1" maxWidth="Infinity" GridPane.hgrow="ALWAYS"/>
-                <Button GridPane.columnIndex="2" maxWidth="Infinity" GridPane.hgrow="ALWAYS"/>
+                <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
+                        text="Restart"/>
+                <Button GridPane.columnIndex="1" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
+                onMouseClicked="#onExit" text="Back"/>
             </GridPane>
         </bottom>
     </BorderPane>
