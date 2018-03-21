@@ -1,19 +1,21 @@
 package game;
 
+import game.gameTypes.GameOptions;
 import game.gameTypes.MultiPlayerGameType;
 import game.gameTypes.SinglePlayerGameType;
 
+/**
+ * In this class options for the new game a stored. Also, this class helps to
+ * create different game types such as multi-player/single-player game.
+ */
 @SuppressWarnings("WeakerAccess")
 public class GameConfig {
 
-    private static final GameOptions MULTI_PLAYER_GAME_TYPE = new MultiPlayerGameType();
-    private static final GameOptions SINGLE_PLAYER_EASY_GAME
-            = new SinglePlayerGameType(SinglePlayerGameType.BotLevel.EASY);
-    private static final GameOptions SINGLE_PLAYER_HARD_GAME
-            = new SinglePlayerGameType(SinglePlayerGameType.BotLevel.HARD);
+    private static GameOptions options = MultiPlayerGameType.multiPlayerGame();
 
-    private static GameOptions options = MULTI_PLAYER_GAME_TYPE;
-
+    /**
+     * The method returns current game options.
+     */
     public static GameOptions getOptions() {
         return options;
     }
@@ -22,16 +24,25 @@ public class GameConfig {
         GameConfig.options = options;
     }
 
+    /**
+     * Options for default multi-player game.
+     */
     public static void setMultiPlayerGame() {
-        setOptions(MULTI_PLAYER_GAME_TYPE);
+        setOptions(MultiPlayerGameType.multiPlayerGame());
     }
 
+    /**
+     * Options for default single-player game with easy bot. Player will have the first turn.
+     */
     public static void setSinglePlayerEasyGame() {
-        setOptions(SINGLE_PLAYER_EASY_GAME);
+        setOptions(SinglePlayerGameType.singlePlayerGame(true, true));
     }
 
+    /**
+     * Options for default single-player game with hard bot. Player will have the first turn.
+     */
     public static void setSinglePlayerHardGame() {
-        setOptions(SINGLE_PLAYER_HARD_GAME);
+        setOptions(SinglePlayerGameType.singlePlayerGame(false, true));
     }
 
 }

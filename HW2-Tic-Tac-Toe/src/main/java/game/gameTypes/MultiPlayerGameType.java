@@ -5,9 +5,21 @@ import utils.CircleList;
 
 import java.util.Arrays;
 
+/**
+ * Default class for multi-player game type. Overrides constructor with fabric method.
+ */
 public class MultiPlayerGameType extends AbstractGameType {
 
-    public MultiPlayerGameType() {
+    private final static GameOptions MULTI_PLAYER_GAME_TYPE = new MultiPlayerGameType();
+
+    /**
+     * The method returns game options to describe simple Multi-player game.
+     */
+    public static GameOptions multiPlayerGame() {
+        return MULTI_PLAYER_GAME_TYPE;
+    }
+
+    private MultiPlayerGameType() {
         super(new CircleList<>(Arrays.asList(new HumanPlayer(), new HumanPlayer())));
     }
 }

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.Double?>
 <StackPane fx:id="gameModeMenu" xmlns:fx="http://javafx.com/fxml/1"
-           stylesheets="tic-tac-toe.css" fx:controller="controllers.ModeMenuHandler">
+           stylesheets="tic-tac-toe.css" fx:controller="handlers.ModeMenuHandler">
 
     <fx:define>
         <Double fx:id="mainAnchor" fx:value="60"/>

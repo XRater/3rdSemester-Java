@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.Double?>
 <StackPane fx:id="gameScreen" xmlns:fx="http://javafx.com/fxml"
-           stylesheets="tic-tac-toe.css" fx:controller="controllers.GameHandler">
+           stylesheets="tic-tac-toe.css" fx:controller="handlers.GameHandler">
 
     <fx:define>
         <Double fx:id="mainAnchor" fx:value="20"/>
@@ -73,7 +73,7 @@
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
                            stylesheets="tic-tac-toe.css" styleClass="cell">
-                    <ImageView styleClass="cell-empty" fitHeight="70" fitWidth="70"/>
+                    <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="2"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
@@ -92,9 +92,9 @@
                     <Insets top="15"/>
                 </padding>
                 <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
-                        text="Restart"/>
+                        text="Restart" onMouseClicked="#onRestart"/>
                 <Button GridPane.columnIndex="1" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
-                onMouseClicked="#onExit" text="Back"/>
+                onMouseClicked="#onExit" text="Exit"/>
             </GridPane>
         </bottom>
     </BorderPane>

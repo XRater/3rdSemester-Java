@@ -1,29 +1,25 @@
 package game.model;
 
-import game.GameOptions;
+import game.gameTypes.GameOptions;
 import game.model.players.Bot;
 import game.model.players.Player;
-import view.View;
 
 import java.util.Iterator;
 
 public class Model {
 
-    private final View view;
-    private boolean isInitialized;
+    private final GameSession gameSession;
 
     private final Board board = new Board();
-    private Turn turn;
+    private final Iterator<Player> iterator;
 
-    private Iterator<Player> iterator;
+    private Turn turn;
     private Player player;
 
-    public Model(final View view) {
-        this.view = view;
-    }
+    private boolean gameInProgress = true;
 
-    public void initialize(final GameOptions gameOptions) {
-        board.clear();
+    Model(final GameSession gameSession, final GameOptions gameOptions) {
+        this.gameSession = gameSession;
 
         iterator = gameOptions.getPlayers().circleIterator();
         player = iterator.next();
@@ -35,31 +31,33 @@ public class Model {
                 ((Bot) player).initBot(this);
             }
         }
-
-        isInitialized = true;
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public void clear() {
-        isInitialized = false;
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.size(); j++) {
-                view.set(i, j, Cell.EMPTY);
-            }
-        }
-    }
-
     public boolean turn(final int x, final int y) {
-        if (!isInitialized) {
-            throw new NotInitializedYetException();
+        if (!gameInProgress) {
+            return false;
         }
         final Cell cell = turn == Turn.X ? Cell.X : Cell.O;
         if (board.set(x, y, cell)) {
-            view.set(x, y, cell);
+            gameSession.set(x, y, cell);
+            if (checkGameEnd()) {
+                gameInProgress = false;
+                return true;
+            }
             nextPlayer();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkGameEnd() {
+        final GameState state = board.getState();
+        if (state != GameState.IN_PROGRESS) {
+            gameSession.onGameEnd(state);
             return true;
         }
         return false;
@@ -79,6 +77,4 @@ public class Model {
         X, O
     }
 
-    private class NotInitializedYetException extends RuntimeException {
-    }
 }

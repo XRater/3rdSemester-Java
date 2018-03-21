@@ -1,9 +1,12 @@
 package game.gameTypes;
 
-import game.GameOptions;
 import game.model.players.Player;
 import utils.CircleList;
 
+/**
+ * This class provides simple constructor for game type.
+ */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractGameType implements GameOptions {
 
     protected final CircleList<Player> players;

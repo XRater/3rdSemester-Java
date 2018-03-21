@@ -1,4 +1,4 @@
-import controllers.SceneManager;
+import handlers.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
