@@ -1,6 +1,5 @@
 package ru.spbau.mit.kirakosian;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
@@ -40,14 +39,10 @@ class LazyFactoryTest {
     }
 
     @Test
-    void testCreateSynchronizedLazy() {
+    void testCreateSynchronizedLazy() throws InterruptedException {
         for (int i = 0; i < testsNumber; i++) {
-            try {
-                oneCreateSynchronizedLazyTest("hello");
-                oneCreateSynchronizedLazyTest(null);
-            } catch (@NotNull final InterruptedException e) {
-                // no idea what to do here... It is not a failure
-            }
+            oneCreateSynchronizedLazyTest("hello");
+            oneCreateSynchronizedLazyTest(null);
         }
     }
 

@@ -30,7 +30,7 @@ public class LazyFactory {
      * Basic method to create synchronized lazy class from the given supplier.
      *
      * @param supplier supplier to get element from.
-     * @param <T> type of the stored in ru.spbau.mit.kirakosian.Lazy element
+     * @param <T> type of the stored in Lazy element
      * @return new concurrent safe ru.spbau.mit.kirakosian.Lazy instance
      */
     public static <T> Lazy<T> createSynchronizedLazy(final Supplier<T> supplier) {
@@ -73,7 +73,7 @@ public class LazyFactory {
     private static class LazySync<T> implements Lazy<T> {
 
         @Nullable
-        private Supplier<T> supplier;
+        private volatile Supplier<T> supplier;
         private T value;
 
         LazySync(@Nullable final Supplier<T> supplier) {
@@ -85,6 +85,7 @@ public class LazyFactory {
             if (supplier != null) {
                 synchronized (this) {
                     if (supplier != null) { // check that we have not done this section yet
+                        //noinspection ConstantConditions
                         value = supplier.get();
                         supplier = null;
                     }
