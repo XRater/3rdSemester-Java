@@ -5,6 +5,7 @@ import game.model.Cell;
 import game.model.GameState;
 import game.model.Model;
 
+@SuppressWarnings("WeakerAccess")
 abstract class OptimizationBot implements Bot {
 
     private Model model;

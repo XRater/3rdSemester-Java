@@ -2,6 +2,7 @@ package game.gameTypes;
 
 import game.model.Model;
 import game.model.players.Player;
+import org.jetbrains.annotations.NotNull;
 import utils.CycleCollection;
 
 /**
@@ -18,6 +19,8 @@ public interface GameOptions {
     /**
      * Returns first-turn symbol.
      */
+    @SuppressWarnings("SameReturnValue")
+    @NotNull
     default Model.Turn getFirstTurn() {
         return Model.Turn.X;
     }

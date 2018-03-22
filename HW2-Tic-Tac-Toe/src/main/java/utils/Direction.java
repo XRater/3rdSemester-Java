@@ -9,6 +9,7 @@ public class Direction {
     private final int dx;
     private final int dy;
 
+    @SuppressWarnings("WeakerAccess")
     public Direction(final int dx, final int dy) {
         this.dx = dx;
         this.dy = dy;

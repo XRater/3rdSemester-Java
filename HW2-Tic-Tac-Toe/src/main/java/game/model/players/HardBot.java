@@ -2,23 +2,22 @@ package game.model.players;
 
 import game.model.Board;
 import game.model.Cell;
-import game.model.GameState;
+import org.jetbrains.annotations.NotNull;
 import utils.Direction;
 
 /**
  * Hard bot for tic-tac-toe 3x3 game.
- *
+ * <p>
  * This bot compares different turns by optimality function. Therefore, it is easy to
  * modify this bot by changing {@link HardBot#getScore(Board)} function.
  */
 public class HardBot extends OptimizationBot {
 
     @Override
-    protected int getScore(final Board board) {
+    protected int getScore(@NotNull final Board board) {
         int score = 10;
         final int size = board.size();
         final int target = 3;
-        final GameState state = board.getState();
 
         if (isGameWon()) {
             return Integer.MAX_VALUE;
@@ -63,6 +62,15 @@ public class HardBot extends OptimizationBot {
 
         if (board.get(size / 2, size / 2) == ourCell) {
             score += 20;
+        }
+
+        final int[] xs = {0, board.size() - 1};
+        for (final int i : xs) {
+            for (final int j : xs) {
+                if (board.get(i, j) == ourCell) {
+                    score += 10;
+                }
+            }
         }
 
         return Math.max(score, 0);

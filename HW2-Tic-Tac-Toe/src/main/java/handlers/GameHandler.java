@@ -1,7 +1,7 @@
 package handlers;
 
 import game.GameConfig;
-import game.model.GameSession;
+import game.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -20,12 +20,12 @@ public class GameHandler implements Handler {
     @FXML private StackPane gameScreen;
     @FXML private GridPane table;
 
-    private GameSession gameSession;
+    private GameController gameController;
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         setFieldListeners();
-        gameSession = new GameSession(initView());
+        gameController = new GameController(initView());
 
         gameScreen.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -36,7 +36,9 @@ public class GameHandler implements Handler {
 
     @Override
     public void onShow() {
-        gameSession.initGame(GameConfig.getOptions());
+        if (!gameController.isActiveSession()) {
+            gameController.startNewSession(GameConfig.getOptions());
+        }
     }
 
     private View initView() {
@@ -58,16 +60,32 @@ public class GameHandler implements Handler {
                 final StackPane stackPane = (StackPane) node;
                 final int x = GridPane.getColumnIndex(stackPane);
                 final int y = GridPane.getRowIndex(stackPane);
-                stackPane.setOnMouseReleased(event -> gameSession.turn(x, y));
+                stackPane.setOnMouseReleased(event -> {
+                    if (gameController.isGameInProgress()) {
+                        gameController.turn(x, y);
+                    } else {
+                        onRestart();
+                    }
+                });
             }
         }
     }
 
-    @FXML public void onRestart() {
-        gameSession.initGame(GameConfig.getOptions());
+    @FXML
+    private void onRestart() {
+        gameController.startNewGame(GameConfig.getOptions());
     }
 
-    @FXML public void onExit() {
+    @FXML
+    private void onExit() {
+        gameController.closeSession();
         SceneManager.changeScene(SceneManager.SceneEnum.MAIN_MENU);
+    }
+
+    @FXML
+    private void onStats() {
+        SceneManager.changeScene(SceneManager.SceneEnum.STATS);
+        ((StatsHandler) SceneManager.getScene(SceneManager.SceneEnum.STATS)).
+                setStatistics(gameController.getStatistics());
     }
 }

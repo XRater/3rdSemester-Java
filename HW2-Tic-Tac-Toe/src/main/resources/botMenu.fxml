@@ -26,11 +26,14 @@
                     <RowConstraints minHeight="10.0" percentHeight="20.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <Button alignment="CENTER" maxWidth="Infinity" text="Easy"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" onMouseClicked="#onEasyBot"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="1" GridPane.hgrow="ALWAYS"
                         text="Hard" onMouseClicked="#onHardBot"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"
                         text="Back" onMouseClicked="#onBackToModeMenu" cancelButton="true"/>
             </GridPane>

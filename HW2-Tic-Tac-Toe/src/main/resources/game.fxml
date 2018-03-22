@@ -81,10 +81,12 @@
                     <ImageView fitHeight="70" fitWidth="70"/>
                 </StackPane>
         </GridPane>
+            <!--<Text text="HELLO" textAlignment="CENTER"/>-->
         </center>
         <bottom>
             <GridPane alignment="CENTER" hgap="20">
                 <columnConstraints>
+                    <ColumnConstraints minWidth="10.0" percentWidth="40" hgrow="SOMETIMES"/>
                     <ColumnConstraints minWidth="10.0" percentWidth="40" hgrow="SOMETIMES"/>
                     <ColumnConstraints minWidth="10.0" percentWidth="40" hgrow="SOMETIMES"/>
                 </columnConstraints>
@@ -92,9 +94,14 @@
                     <Insets top="15"/>
                 </padding>
                 <Button GridPane.columnIndex="0" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
+                        styleClass="tic-tac-toe-button"
                         text="Restart" onMouseClicked="#onRestart"/>
                 <Button GridPane.columnIndex="1" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
-                onMouseClicked="#onExit" text="Exit"/>
+                        styleClass="tic-tac-toe-button"
+                        onMouseClicked="#onStats" text="Stats"/>
+                <Button GridPane.columnIndex="2" maxWidth="Infinity" GridPane.vgrow="ALWAYS"
+                        styleClass="tic-tac-toe-button"
+                        onMouseClicked="#onExit" text="Exit"/>
             </GridPane>
         </bottom>
     </BorderPane>

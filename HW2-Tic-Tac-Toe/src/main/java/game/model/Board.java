@@ -1,5 +1,6 @@
 package game.model;
 
+import org.jetbrains.annotations.NotNull;
 import utils.Direction;
 
 @SuppressWarnings("WeakerAccess")
@@ -48,6 +49,7 @@ public class Board {
         }
     }
 
+    @NotNull
     public GameState getState() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -72,7 +74,8 @@ public class Board {
         return GameState.DRAW;
     }
 
-    private LineState getLineState(final int x, final int y, final Direction direction) {
+    @NotNull
+    private LineState getLineState(final int x, final int y, @NotNull final Direction direction) {
         final Cell init = board[x][y];
         for (int i = 1; i < targetLength; i++) {
             final int newX = x + i * direction.dx();

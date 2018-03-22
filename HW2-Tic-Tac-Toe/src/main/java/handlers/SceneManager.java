@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -15,16 +16,17 @@ import java.io.IOException;
 public class SceneManager {
 
     public enum SceneEnum {
-        GAME, MAIN_MENU, MODE_MENU, BOT_MENU
-    }
+        GAME, MAIN_MENU, MODE_MENU, BOT_MENU, STATS
 
+    }
     private static Stage stage;
 
     private static final LazyScene gameScene = new LazyScene("../game.fxml");
+
     private static final LazyScene mainMenuScene = new LazyScene("../mainMenu.fxml");
     private static final LazyScene modeMenuScene = new LazyScene("../modeMenu.fxml");
     private static final LazyScene botMenuScene = new LazyScene("../botMenu.fxml");
-
+    private static final LazyScene statsScene = new LazyScene("../stats.fxml");
     /**
      * Initializes SceneManager with main stage.
      *
@@ -59,6 +61,9 @@ public class SceneManager {
                 newScene = botMenuScene.getScene();
                 newHandler = botMenuScene.getHandler();
                 break;
+            case STATS:
+                newScene = statsScene.getScene();
+                newHandler = statsScene.getHandler();
         }
         final double width = stage.getWidth();
         final double height = stage.getHeight();
@@ -70,6 +75,24 @@ public class SceneManager {
         stage.setHeight(height);
     }
 
+    @SuppressWarnings("WeakerAccess")
+    public static Handler getScene(final SceneEnum sceneEnum) {
+        switch (sceneEnum) {
+            case GAME:
+                return gameScene.getHandler();
+            case MAIN_MENU:
+                return mainMenuScene.getHandler();
+            case MODE_MENU:
+                return modeMenuScene.getHandler();
+            case BOT_MENU:
+                return botMenuScene.getHandler();
+            case STATS:
+                return statsScene.getHandler();
+        }
+        throw new NoSuchSceneException();
+    }
+
+
     /**
      * This class provides lazy initialization of scenes.
      *
@@ -79,6 +102,7 @@ public class SceneManager {
      */
     @SuppressWarnings("WeakerAccess")
     private static class LazyScene {
+
 
         private Scene scene;
         private Handler handler;
@@ -107,7 +131,7 @@ public class SceneManager {
             final Parent root;
             try {
                 root = loader.load(SceneManager.class.getResourceAsStream(name));
-            } catch (final IOException e) {
+            } catch (@NotNull final IOException e) {
                 throw new ErrorWhileLoadingScene(e);
             }
             handler = loader.getController();
@@ -127,5 +151,8 @@ public class SceneManager {
         @SuppressWarnings("unused")
         ErrorWhileLoadingScene(final IOException e) {
         }
+    }
+
+    private static class NoSuchSceneException extends RuntimeException {
     }
 }

@@ -41,8 +41,10 @@ public class CycleCollection<T> extends AbstractCollection<T> {
      * At the beginning iterator will point at the first element of the collection. If
      * iterator points in the last element, next method will move it to the first one again.
      */
+    @NotNull
     public Iterator<T> cycleIterator() {
         return new Iterator<>() {
+            @NotNull
             private Iterator<T> iterator = collection.iterator();
 
             @Override

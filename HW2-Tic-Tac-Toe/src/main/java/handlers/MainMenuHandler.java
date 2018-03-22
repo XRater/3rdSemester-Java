@@ -12,7 +12,8 @@ import java.util.ResourceBundle;
  */
 public class MainMenuHandler implements Handler {
 
-    @FXML public StackPane mainMenu;
+    @FXML
+    private StackPane mainMenu;
 
     /**
      * The method sets exit listener for escape button.
@@ -29,14 +30,16 @@ public class MainMenuHandler implements Handler {
     /**
      * The method changes scene to the ModeMenu scene.
      */
-    public void onNewGame() {
+    @FXML
+    private void onNewGame() {
         SceneManager.changeScene(SceneManager.SceneEnum.MODE_MENU);
     }
 
     /**
      * The method closes an application.
      */
-    public void onExit() {
+    @FXML
+    private void onExit() {
         System.exit(0);
     }
 }

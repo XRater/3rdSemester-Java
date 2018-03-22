@@ -1,6 +1,7 @@
 package handlers;
 
 import game.GameConfig;
+import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
@@ -12,7 +13,8 @@ import java.util.ResourceBundle;
  */
 public class BotMenuHandler implements Handler {
 
-    public StackPane botModeMenu;
+    @FXML
+    private StackPane botModeMenu;
 
     /**
      * The method sets exit listener for escape button.
@@ -29,7 +31,8 @@ public class BotMenuHandler implements Handler {
     /**
      * The method initializes new single-player game with an easy bot.
      */
-    public void onEasyBot() {
+    @FXML
+    private void onEasyBot() {
         GameConfig.setSinglePlayerEasyGame();
         SceneManager.changeScene(SceneManager.SceneEnum.GAME);
     }
@@ -37,7 +40,8 @@ public class BotMenuHandler implements Handler {
     /**
      * The method initializes new single-player game with a hard bot.
      */
-    public void onHardBot() {
+    @FXML
+    private void onHardBot() {
         GameConfig.setSinglePlayerHardGame();
         SceneManager.changeScene(SceneManager.SceneEnum.GAME);
     }
@@ -45,7 +49,8 @@ public class BotMenuHandler implements Handler {
     /**
      * The method changes scene to the ModeMenu scene.
      */
-    public void onBackToModeMenu() {
+    @FXML
+    private void onBackToModeMenu() {
         SceneManager.changeScene(SceneManager.SceneEnum.MODE_MENU);
     }
 }

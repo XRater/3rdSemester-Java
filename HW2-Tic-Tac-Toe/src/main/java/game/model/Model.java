@@ -1,14 +1,16 @@
 package game.model;
 
+import game.GameController;
 import game.gameTypes.GameOptions;
 import game.model.players.Bot;
 import game.model.players.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
 public class Model {
 
-    private final GameSession gameSession;
+    private final GameController gameController;
 
     private final Board board = new Board();
     private final Iterator<Player> iterator;
@@ -18,8 +20,8 @@ public class Model {
 
     private boolean gameInProgress = true;
 
-    Model(final GameSession gameSession, final GameOptions gameOptions) {
-        this.gameSession = gameSession;
+    public Model(final GameController gameController, final GameOptions gameOptions) {
+        this.gameController = gameController;
 
         iterator = gameOptions.getPlayers().cycleIterator();
         player = iterator.next();
@@ -35,31 +37,30 @@ public class Model {
         }
     }
 
+    @NotNull
     public Board getBoard() {
         return board;
     }
 
-    public boolean turn(final int x, final int y) {
+    public void turn(final int x, final int y) {
         if (!gameInProgress) {
-            return false;
+            return;
         }
         final Cell cell = turn == Turn.X ? Cell.X : Cell.O;
         if (board.set(x, y, cell)) {
-            gameSession.set(x, y, cell);
+            gameController.set(x, y, cell);
             if (checkGameEnd()) {
                 gameInProgress = false;
-                return true;
+                return;
             }
             nextPlayer();
-            return true;
         }
-        return false;
     }
 
     private boolean checkGameEnd() {
         final GameState state = board.getState();
         if (state != GameState.IN_PROGRESS) {
-            gameSession.onGameEnd(state);
+            gameController.onGameEnd(state);
             return true;
         }
         return false;

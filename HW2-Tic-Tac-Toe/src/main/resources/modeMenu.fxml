@@ -26,11 +26,14 @@
                     <RowConstraints minHeight="10.0" percentHeight="20.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <Button alignment="CENTER" maxWidth="Infinity" text="Multi Player"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" onMouseClicked="#onNewMultiGame"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="1" GridPane.hgrow="ALWAYS"
                         text="Single Player" onMouseClicked="#onNewSingleGame"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
+                        styleClass="tic-tac-toe-button"
                         GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"
                         text="Back" onMouseClicked="#onBackToMainMenu" cancelButton="true"/>
             </GridPane>

@@ -1,6 +1,7 @@
 package game.gameTypes;
 
 import game.model.players.*;
+import org.jetbrains.annotations.NotNull;
 import utils.CycleCollection;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class SinglePlayerGameType extends AbstractGameType {
      * @param first describes, whether human player has first turn or second one.
      * @return new single-player game options described by the given parameters.
      */
+    @NotNull
     public static GameOptions singlePlayerGame(final boolean isEasy, final boolean first) {
         if (isEasy) {
             return first ? SINGLE_PLAYER_EASY_FIRST : SINGLE_PLAYER_EASY_SECOND;
@@ -38,7 +40,7 @@ public class SinglePlayerGameType extends AbstractGameType {
         return first ? SINGLE_PLAYER_HARD_FIRST : SINGLE_PLAYER_HARD_SECOND;
     }
 
-    private SinglePlayerGameType(final BotLevel level, final boolean firstTurn) {
+    private SinglePlayerGameType(@NotNull final BotLevel level, final boolean firstTurn) {
         super(getList(level, firstTurn));
     }
 
@@ -63,7 +65,7 @@ public class SinglePlayerGameType extends AbstractGameType {
      * @param firstTurn set true, if player has first turn and false otherwise.
      * @return new list
      */
-    private static CycleCollection<Player> getList(final BotLevel level, final boolean firstTurn) {
+    private static CycleCollection<Player> getList(@NotNull final BotLevel level, final boolean firstTurn) {
         final Bot bot = getBot(level);
         return firstTurn ?
                 new CycleCollection<>(Arrays.asList(new HumanPlayer(), bot)) :

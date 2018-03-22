@@ -31,7 +31,8 @@ public class ModeMenuHandler implements Handler {
     /**
      * The method initializes new multi-player game.
      */
-    public void onNewMultiGame() {
+    @FXML
+    private void onNewMultiGame() {
         GameConfig.setMultiPlayerGame();
         SceneManager.changeScene(SceneManager.SceneEnum.GAME);
     }
@@ -39,14 +40,16 @@ public class ModeMenuHandler implements Handler {
     /**
      * The method changes scene to the BotLevelMenu scene.
      */
-    public void onNewSingleGame() {
+    @FXML
+    private void onNewSingleGame() {
         SceneManager.changeScene(SceneManager.SceneEnum.BOT_MENU);
     }
 
     /**
      * The method changes scene to the MainMenu scene.
      */
-    public void onBackToMainMenu() {
+    @FXML
+    private void onBackToMainMenu() {
         SceneManager.changeScene(SceneManager.SceneEnum.MAIN_MENU);
     }
 }

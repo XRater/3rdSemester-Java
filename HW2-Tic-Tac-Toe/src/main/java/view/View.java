@@ -4,6 +4,7 @@ import game.model.Cell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * View class to control game board.
@@ -21,7 +22,7 @@ public class View {
     private final StackPane[][] grid;
 
     /**
-     * Creates view from the grid. Created view class will be able t controll inner images
+     * Creates view from the grid. Created view class will be able t control inner images
      * of grid.
      */
     public View(final StackPane[][] grid) {
@@ -35,7 +36,7 @@ public class View {
      * @param y y-coordinate.
      * @param cell cell state to put into target cell.
      */
-    public void set(final int x, final int y, final Cell cell) {
+    public void set(final int x, final int y, @NotNull final Cell cell) {
         final ImageView imageView = (ImageView) grid[x][y].getChildren().iterator().next();
 
         switch (cell) {

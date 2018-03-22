@@ -1,11 +1,12 @@
 package game.model.players;
 
 import game.model.Board;
+import org.jetbrains.annotations.NotNull;
 
 public class EasyBot extends OptimizationBot {
 
     @Override
-    protected int getScore(final Board board) {
+    protected int getScore(@NotNull final Board board) {
         int score = 0;
 
         if (isGameWon()) {
