@@ -12,6 +12,9 @@ import view.View;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Handles game actions.
+ */
 public class GameHandler implements Handler {
 
     @FXML private StackPane gameScreen;

@@ -32,7 +32,7 @@
                         text="Single Player" onMouseClicked="#onNewSingleGame"/>
                 <Button alignment="CENTER" maxWidth="Infinity"
                         GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"
-                        text="Back" onMouseClicked="#onBackFromTypeMenu" cancelButton="true"/>
+                        text="Back" onMouseClicked="#onBackToMainMenu" cancelButton="true"/>
             </GridPane>
         </center>
     </BorderPane>

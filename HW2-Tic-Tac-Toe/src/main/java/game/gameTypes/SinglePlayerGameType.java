@@ -1,7 +1,7 @@
 package game.gameTypes;
 
 import game.model.players.*;
-import utils.CircleList;
+import utils.CycleCollection;
 
 import java.util.Arrays;
 
@@ -63,11 +63,11 @@ public class SinglePlayerGameType extends AbstractGameType {
      * @param firstTurn set true, if player has first turn and false otherwise.
      * @return new list
      */
-    private static CircleList<Player> getList(final BotLevel level, final boolean firstTurn) {
+    private static CycleCollection<Player> getList(final BotLevel level, final boolean firstTurn) {
         final Bot bot = getBot(level);
         return firstTurn ?
-                new CircleList<>(Arrays.asList(new HumanPlayer(), bot)) :
-                new CircleList<>(Arrays.asList(bot, new HumanPlayer()));
+                new CycleCollection<>(Arrays.asList(new HumanPlayer(), bot)) :
+                new CycleCollection<>(Arrays.asList(bot, new HumanPlayer()));
     }
 
     private enum BotLevel {

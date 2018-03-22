@@ -1,7 +1,7 @@
 package game.gameTypes;
 
 import game.model.players.HumanPlayer;
-import utils.CircleList;
+import utils.CycleCollection;
 
 import java.util.Arrays;
 
@@ -20,6 +20,6 @@ public class MultiPlayerGameType extends AbstractGameType {
     }
 
     private MultiPlayerGameType() {
-        super(new CircleList<>(Arrays.asList(new HumanPlayer(), new HumanPlayer())));
+        super(new CycleCollection<>(Arrays.asList(new HumanPlayer(), new HumanPlayer())));
     }
 }

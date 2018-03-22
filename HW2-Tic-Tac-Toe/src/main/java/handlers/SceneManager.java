@@ -7,6 +7,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This class provides simple interface to change scenes in the application.
+ *
+ * As a small bonus of this class, every scene will be initialized not more then one time.
+ */
 public class SceneManager {
 
     public enum SceneEnum {
@@ -20,10 +25,20 @@ public class SceneManager {
     private static final LazyScene modeMenuScene = new LazyScene("../modeMenu.fxml");
     private static final LazyScene botMenuScene = new LazyScene("../botMenu.fxml");
 
+    /**
+     * Initializes SceneManager with main stage.
+     *
+     * @param primaryStage stage to work with.
+     */
     public static void initialize(final Stage primaryStage) {
         stage = primaryStage;
     }
 
+    /**
+     * The method changes a scene.
+     *
+     * @param sceneEnum describes the scene to call.
+     */
     public static void changeScene(final SceneEnum sceneEnum) {
         Scene newScene = null;
         Handler newHandler = null;
@@ -55,6 +70,13 @@ public class SceneManager {
         stage.setHeight(height);
     }
 
+    /**
+     * This class provides lazy initialization of scenes.
+     *
+     * We do not have a lot of overhead without this class in that game,
+     * but in general it might be a good pattern not to load every single scene
+     * on the game start, and to load them when they are required instead.
+     */
     @SuppressWarnings("WeakerAccess")
     private static class LazyScene {
 
@@ -93,6 +115,14 @@ public class SceneManager {
         }
     }
 
+    /**
+     * This wrapper is required, because most of IOExceptions here are caused by
+     * mistake in program, such as wrong files names and so on.
+     *
+     * Also, we might have no file cause user deleted it or something like that,
+     * but right now I am not able to fix it (download files from server for example),
+     * therefore it is more logical to throw a RuntimeException here.
+     */
     private static class ErrorWhileLoadingScene extends RuntimeException {
         @SuppressWarnings("unused")
         ErrorWhileLoadingScene(final IOException e) {

@@ -21,7 +21,7 @@ public class Model {
     Model(final GameSession gameSession, final GameOptions gameOptions) {
         this.gameSession = gameSession;
 
-        iterator = gameOptions.getPlayers().circleIterator();
+        iterator = gameOptions.getPlayers().cycleIterator();
         player = iterator.next();
         turn = gameOptions.getFirstTurn();
 

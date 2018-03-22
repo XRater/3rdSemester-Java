@@ -8,30 +8,45 @@ import javafx.scene.layout.StackPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Handler to work with ModeMenu buttons.
+ */
 public class ModeMenuHandler implements Handler {
 
     @FXML
     private StackPane gameModeMenu;
 
+    /**
+     * The method sets exit listener for escape button.
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         gameModeMenu.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                onBackFromTypeMenu();
+                onBackToMainMenu();
             }
         });
     }
 
+    /**
+     * The method initializes new multi-player game.
+     */
     public void onNewMultiGame() {
         GameConfig.setMultiPlayerGame();
         SceneManager.changeScene(SceneManager.SceneEnum.GAME);
     }
 
+    /**
+     * The method changes scene to the BotLevelMenu scene.
+     */
     public void onNewSingleGame() {
         SceneManager.changeScene(SceneManager.SceneEnum.BOT_MENU);
     }
 
-    public void onBackFromTypeMenu() {
+    /**
+     * The method changes scene to the MainMenu scene.
+     */
+    public void onBackToMainMenu() {
         SceneManager.changeScene(SceneManager.SceneEnum.MAIN_MENU);
     }
 }

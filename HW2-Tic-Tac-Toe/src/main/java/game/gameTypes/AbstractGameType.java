@@ -1,7 +1,7 @@
 package game.gameTypes;
 
 import game.model.players.Player;
-import utils.CircleList;
+import utils.CycleCollection;
 
 /**
  * This class provides simple constructor for game type.
@@ -9,14 +9,14 @@ import utils.CircleList;
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractGameType implements GameOptions {
 
-    protected final CircleList<Player> players;
+    protected final CycleCollection<Player> players;
 
-    protected AbstractGameType(final CircleList<Player> players) {
+    protected AbstractGameType(final CycleCollection<Player> players) {
         this.players = players;
     }
 
     @Override
-    public final CircleList<Player> getPlayers() {
+    public final CycleCollection<Player> getPlayers() {
         return players;
     }
 
