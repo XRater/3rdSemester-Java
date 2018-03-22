@@ -26,10 +26,12 @@ public class Model {
         turn = gameOptions.getFirstTurn();
 
         // Init bots
+        Turn tmpTurn = gameOptions.getFirstTurn();
         for (final Player player : gameOptions.getPlayers()) {
             if (player instanceof Bot) {
-                ((Bot) player).initBot(this);
+                ((Bot) player).initBot(this, tmpTurn);
             }
+            tmpTurn = tmpTurn == Turn.X ? Turn.O : Turn.X;
         }
     }
 
@@ -65,11 +67,7 @@ public class Model {
 
     private void nextPlayer() {
         player = iterator.next();
-        if (turn == Turn.X) {
-            turn = Turn.O;
-        } else {
-            turn = Turn.X;
-        }
+        turn = turn == Turn.X ? Turn.O : Turn.X;
         player.getTurn();
     }
 

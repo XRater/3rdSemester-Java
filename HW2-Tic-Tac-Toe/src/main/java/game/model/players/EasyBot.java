@@ -1,29 +1,30 @@
 package game.model.players;
 
 import game.model.Board;
-import game.model.Model;
 
-public class EasyBot implements Bot {
-
-    private Model model;
-    private Board board;
+public class EasyBot extends OptimizationBot {
 
     @Override
-    public void initBot(final Model model) {
-        this.model = model;
-        board = model.getBoard();
-    }
+    protected int getScore(final Board board) {
+        int score = 0;
 
-    @Override
-    public void getTurn() {
-        final int size = board.size();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board.isEmpty(i, j)) {
-                    model.turn(i, j);
-                    return;
+        if (isGameWon()) {
+            return Integer.MAX_VALUE;
+        }
+
+        if (board.get(board.size() / 2, board.size() / 2) == ourCell) {
+            score += 50;
+        }
+
+        final int[] xs = {0, board.size() - 1};
+        for (final int i : xs) {
+            for (final int j : xs) {
+                if (board.get(i, j) == ourCell) {
+                    score += 10;
                 }
             }
         }
+        return score;
     }
+
 }

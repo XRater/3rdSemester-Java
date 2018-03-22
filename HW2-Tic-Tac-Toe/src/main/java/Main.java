@@ -2,8 +2,14 @@ import handlers.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Main class of application. Starts a tic-tac-toe application.
+ */
 public class Main extends Application {
 
+    /**
+     * The main entry point of tic-tac-toe application.
+     */
     @Override
     public void start(final Stage primaryStage) {
         primaryStage.setMinWidth(300);

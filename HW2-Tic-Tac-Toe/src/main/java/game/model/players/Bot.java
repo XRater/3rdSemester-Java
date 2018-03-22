@@ -9,5 +9,8 @@ public interface Bot extends Player {
         return true;
     }
 
-    void initBot(Model model);
+    void initBot(Model model, final Model.Turn turn);
+
+    class NoTurnException extends RuntimeException {
+    }
 }
