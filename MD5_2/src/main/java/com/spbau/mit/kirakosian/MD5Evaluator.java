@@ -13,12 +13,23 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
 
+/**
+ * The class is supposed to evaluate MD5 hash of the given by path file.
+ *
+ * For directories will work recursively.
+ */
 @SuppressWarnings("WeakerAccess")
 public class MD5Evaluator {
 
     private static final int BUFFER_SIZE = 1024;
     private static final byte[] buffer = new byte[BUFFER_SIZE];
 
+    /**
+     * Evaluates hash in single thread.
+     *
+     * @param path path to the file
+     * @throws IOException if any error occured
+     */
     public static byte[] evaluateMD5WithOneThread(@NotNull final Path path) throws IOException {
         final MessageDigest md = createMD5MessageDigest();
 
@@ -37,6 +48,12 @@ public class MD5Evaluator {
         return md.digest();
     }
 
+    /**
+     * Evaluates hash with many thread (with ForkJoinPool).
+     *
+     * @param path path to the file
+     * @throws IOException if any error occured
+     */
     public static byte[] evaluateMD5WithMultiThread(@NotNull final Path path) throws IOException {
         final ForkJoinPool pool = new ForkJoinPool();
         final MD5EvaluatorTask task = new MD5EvaluatorTask(path);
