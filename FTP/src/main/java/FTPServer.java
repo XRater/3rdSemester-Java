@@ -3,8 +3,19 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
+/**
+ * FTPServer class. Has factory init method and shutDown method. Also it is possible
+ * to track mistakes, that happened during server work.
+ *
+ * Server may accept a lot of clients and work with them in distinct thread by {@link FTPSession}
+ * class. In fact all possibilities of server are described in {@link FTPSession}.
+ *
+ * Server will shut down if any error occurred during it's work (not just in one created session).
+ **/
+@SuppressWarnings("unused")
 public class FTPServer {
 
+    @SuppressWarnings("WeakerAccess")
     public final static int DEFAULT_PORT = 9095;
 
     private final ServerSocket server;
@@ -64,7 +75,7 @@ public class FTPServer {
     }
 
     private void closeSessions() {
-        for (FTPSession session: sessions) {
+        for (final FTPSession session: sessions) {
             session.close();
         }
     }
@@ -75,6 +86,12 @@ public class FTPServer {
         return session;
     }
 
+    /**
+     * The method shuts down server.
+     *
+     * Server will not accept connections anymore after this method was executed.
+     * Every present session will be closed.
+     */
     public synchronized void shutDown() {
         if (ceaseWorking || server == null || serverClosed) {
             return;
@@ -84,29 +101,53 @@ public class FTPServer {
         while (!serverClosed) {
             try {
                 wait();
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 // do nothing
             }
         }
     }
 
+    /**
+     * This method checks if any error occurred.
+     *
+     * @return true if any error occurred during work and false otherwise.
+     */
     public boolean anyErrorOccurred() {
         return errors.size() != 0;
     }
 
+    /**
+     * Method to track all errors, occurred during work.
+     *
+     * @return list of occurred errors.
+     */
     public List<IOException> getErrors() {
         return errors;
     }
 
+    /**
+     * Creates new FTPServer on {@link FTPServer#DEFAULT_PORT} port.
+     *
+     * @return new FTPServer on default port.
+     * @throws IOException if IOException happened while creating new server.
+     */
+    @SuppressWarnings("WeakerAccess")
     public static FTPServer init() throws IOException {
         return new FTPServer();
     }
 
+    /**
+     * Creates new FTPServer on target port.
+     *
+     * @param port port to create server on.
+     * @return new FTPServer on default port.
+     * @throws IOException if IOException happened while creating new server.
+     */
     public static FTPServer init(final int port) throws IOException {
         return new FTPServer(port);
     }
 
-    public static void main(String[] args) throws IOException {
-        FTPServer server = init();
+    public static void main(final String[] args) throws IOException {
+        final FTPServer server = init();
     }
 }
