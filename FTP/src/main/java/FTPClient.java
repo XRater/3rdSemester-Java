@@ -4,11 +4,15 @@ import java.util.Scanner;
 
 public class FTPClient {
 
-    Socket socket = new Socket("localhost", FTPServer.DEFAULT_PORT);
+    final private Socket socket;
+    final private DataOutputStream os;
+    final private DataInputStream is;
+
 
     public FTPClient() throws IOException {
-        new Thread(this::processRead).start();
-        new Thread(this::processWrite).start();
+        socket = new Socket("localhost", FTPServer.DEFAULT_PORT);
+        os = new DataOutputStream(socket.getOutputStream());
+        is = new DataInputStream(socket.getInputStream());
     }
 
     void processRead() {
@@ -23,28 +27,24 @@ public class FTPClient {
         }
     }
 
-    void processWrite() {
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        writer.write("Hello\n");
-            writer.flush();
-            for (int i = 0; i < 10; i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                writer.write("wow" + Integer.toString(i) + "\n");
-                writer.flush();
+    void list(String path) throws IOException {
+        os.writeInt(1);
+        os.writeUTF(path);
+        os.flush();
+
+        final int number = is.readInt();
+        System.out.println("Total number of files: " + number);
+        for (int i = 0; i < number; i++) {
+            final String name = is.readUTF();
+            final boolean isFolder = is.readBoolean();
+            final String isFolderString = isFolder ? "is a folder." : "is not a folder.";
+            System.out.println("\"" + name + "\" " + isFolderString);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        FTPClient client = new FTPClient();
+        final FTPClient client = new FTPClient();
+        client.list(".");
     }
 
 

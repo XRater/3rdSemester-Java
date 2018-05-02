@@ -1,7 +1,7 @@
-package interfaces.dummies;
+package abstractServer.dummies;
 
-import interfaces.AbstractBlockingServer;
-import interfaces.Session;
+import abstractServer.AbstractBlockingServer;
+import abstractServer.Session;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,5 +32,6 @@ public class DummyServer extends AbstractBlockingServer {
     public static DummyServer init() throws IOException {
         return new DummyServer(DEFAULT_PORT);
     }
+
 
 }

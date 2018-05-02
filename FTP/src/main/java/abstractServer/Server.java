@@ -1,4 +1,4 @@
-package interfaces;
+package abstractServer;
 
 /**
  * Server interface. Might have different architectures.

@@ -1,5 +1,5 @@
-import interfaces.AbstractBlockingServer;
-import interfaces.Session;
+import abstractServer.AbstractBlockingServer;
+import abstractServer.Session;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -29,7 +29,6 @@ public class FTPServer extends AbstractBlockingServer {
 
     @Override
     protected Session newSession(final Socket socket, final int number) {
-        System.out.println("NS: " + socket.isClosed());
         return new FTPSession(socket, number, this);
     }
 
@@ -56,12 +55,6 @@ public class FTPServer extends AbstractBlockingServer {
     }
 
     public static void main(final String[] args) throws IOException {
-        FTPServer server = init();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        server.shutDown();
+        init();
     }
 }

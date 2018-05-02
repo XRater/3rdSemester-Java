@@ -1,4 +1,4 @@
-package interfaces;
+package abstractServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -87,7 +87,7 @@ public abstract class AbstractBlockingServer implements Server {
                     if (e instanceof SocketException && ceaseWorking) {
                         break; // server was turned off
                     }
-                    errors.add(e); // We are going to shutdown if any error occurred
+                    errors.add(e); // Shutdown if any error occurred
                     break;
                 }
             }
@@ -114,7 +114,6 @@ public abstract class AbstractBlockingServer implements Server {
         sessions.remove(session);
         session.close();
     }
-
 
     protected abstract Session newSession(final Socket socket, int number);
 

@@ -1,13 +1,11 @@
-package interfaces;
+package abstractServer;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -40,9 +38,15 @@ public abstract class AbstractBlockingSession implements Session {
         try {
             os = new DataOutputStream(socket.getOutputStream());
         } catch (final IOException e) {
-            errors.add(e);
-            server.closeSession(this);
+            closeSession(e);
         }
+    }
+
+    protected void closeSession(final Exception e) {
+        if (e != null) {
+            errors.add(e);
+        }
+        server.closeSession(this);
     }
 
     // all docs inherited from Session interface
@@ -58,7 +62,7 @@ public abstract class AbstractBlockingSession implements Session {
 
     @Override
     public void close() {
-        // we need two blocks in case any exception occurred during close method call.
+        // we need two block in case of error happened in one of them
         try {
             os.close();
         } catch (final IOException e) {
@@ -84,42 +88,24 @@ public abstract class AbstractBlockingSession implements Session {
         return errors;
     }
 
-    public void sendLineToClient(final String line) {
-        executor.execute(() -> {
-            try {
-                os.writeChars(line + "\n");
-                os.flush();
-            } catch (final IOException e) {
-                errors.add(e);
-                server.closeSession(this);
-            }
-        });
-    }
-
-    public void sendToClient(final byte[] buf) {
+    protected void sendToClient(final byte[] buf) {
         executor.execute(() -> {
             try {
                 os.write(buf);
                 os.flush();
             } catch (final IOException e) {
-                errors.add(e);
-                server.closeSession(this);
+                closeSession(e);
             }
         });
     }
 
     private void processRead() {
-        try (final Scanner scanner = new Scanner(socket.getInputStream())) {
-            while (scanner.hasNextLine()) {
-                final String line = scanner.nextLine();
-                processLine(line);
-                System.out.println(line);
-            }
+        try (final DataInputStream is = new DataInputStream(socket.getInputStream())) {
+            processInput(is);
         } catch (final IOException e) {
-            errors.add(e);
-            server.closeSession(this);
+            closeSession(e);
         }
     }
 
-    protected abstract void processLine(final String line);
+    protected abstract void processInput(final DataInputStream is) throws IOException;
 }

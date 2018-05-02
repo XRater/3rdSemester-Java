@@ -1,10 +1,9 @@
-package interfaces;
+package abstractServer;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * This interface provides session methods to work with one exact client.
