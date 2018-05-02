@@ -1,27 +1,51 @@
-import org.jetbrains.annotations.NotNull;
+import interfaces.AbstractBlockingSession;
+import interfaces.Server;
 
 import java.net.Socket;
 
-public class FTPSession implements Comparable<FTPSession> {
+public class FTPSession extends AbstractBlockingSession {
 
-    private final int id;
-    private final Socket socket;
-
-    FTPSession(final Socket socket, final int id) {
-        this.socket = socket;
-        this.id = id;
-    }
-
-    void process() {
-
+    FTPSession(final Socket socket, final int id, final Server server) {
+        super(socket, id, server);
+        System.out.println("FTP:" + socket.isClosed());
     }
 
     @Override
-    public int compareTo(@NotNull final FTPSession o) {
-        return id - o.id;
+    protected void processLine(final String line) {
+        final String[] tokens = line.split(" ");
+        if (tokens.length != 2) {
+            reject(line);
+            return;
+        }
+        final int query;
+        final String path = tokens[1];
+        try {
+            query = Integer.parseInt(tokens[0]);
+        } catch (final NumberFormatException e) {
+            reject(line);
+            return;
+        }
+        switch (query) {
+            case 1:
+                sendList(path);
+                break;
+            case 2:
+                sendFile(path);
+                break;
+            default:
+                reject(line);
+        }
     }
 
-    public void close() {
+    private void sendList(final String path) {
 
+    }
+
+    private void sendFile(final String path) {
+
+    }
+
+    private void reject(final String line) {
+        sendLineToClient("Invalid query: \"" + line + "\"");
     }
 }
