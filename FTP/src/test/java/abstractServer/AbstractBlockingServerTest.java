@@ -4,6 +4,7 @@ import abstractServer.dummies.DummyClient;
 import abstractServer.dummies.DummyException;
 import abstractServer.dummies.DummyServer;
 import abstractServer.dummies.DummySession;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,10 +16,10 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Every.everyItem;
 import static org.hamcrest.core.Is.is;
 
-public class AbstractBlockingServerTest {
+class AbstractBlockingServerTest {
 
     @Test
-    public void initAndShutDown() throws IOException {
+    void initAndShutDown() throws IOException {
         DummyServer server = DummyServer.init();
 
         for (int i = 0; i < 5; i++) {
@@ -31,7 +32,7 @@ public class AbstractBlockingServerTest {
     }
 
     @Test
-    public void testMessages() throws IOException {
+    void testMessages() throws IOException {
         final DummyServer server = DummyServer.init();
 
         for (int i = 0; i < 5; i++) {
@@ -40,7 +41,7 @@ public class AbstractBlockingServerTest {
 
         try {
             Thread.sleep(1000);
-        } catch (final InterruptedException e) {
+        } catch (@NotNull final InterruptedException e) {
             // just waiting...
         }
 
@@ -59,7 +60,7 @@ public class AbstractBlockingServerTest {
     }
 
     @Test
-    public void testCloseSession() throws IOException {
+    void testCloseSession() throws IOException {
         final DummyServer server = DummyServer.init();
 
         for (int i = 0; i < 3; i++) {
@@ -68,7 +69,7 @@ public class AbstractBlockingServerTest {
 
         try {
             Thread.sleep(1000);
-        } catch (final InterruptedException e) {
+        } catch (@NotNull final InterruptedException e) {
             // just waiting...
         }
 
@@ -85,7 +86,7 @@ public class AbstractBlockingServerTest {
     }
 
     @Test
-    public void testAnswer() throws IOException {
+    void testAnswer() throws IOException {
         final DummyServer server = DummyServer.init();
 
         assertThat(new DummyClient().sendAnswerIntCommand(), is(42));

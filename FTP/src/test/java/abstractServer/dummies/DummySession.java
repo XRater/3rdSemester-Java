@@ -2,6 +2,7 @@ package abstractServer.dummies;
 
 import abstractServer.AbstractBlockingSession;
 import abstractServer.Server;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -15,12 +16,12 @@ public class DummySession extends AbstractBlockingSession {
 
     private final List<String> lines = new ArrayList<>();
 
-    protected DummySession(final Socket socket, final int id, final Server server) {
+    DummySession(@NotNull final Socket socket, final int id, final Server server) {
         super(socket, id, server);
     }
 
     @Override
-    protected void processInput(final DataInputStream is) throws IOException {
+    protected void processInput(@NotNull final DataInputStream is) throws IOException {
         while (true) {
             final int cmd = is.readInt();
             switch (cmd) {
@@ -40,6 +41,7 @@ public class DummySession extends AbstractBlockingSession {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void sendNumber(final int x) throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
         final DataOutputStream os = new DataOutputStream(bos);
@@ -49,6 +51,7 @@ public class DummySession extends AbstractBlockingSession {
         sendToClient(bos.toByteArray());
     }
 
+    @NotNull
     public List<String> lines() {
         return lines;
     }

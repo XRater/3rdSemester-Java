@@ -1,5 +1,8 @@
 package abstractServer;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -21,9 +24,11 @@ import java.util.concurrent.Executors;
 public abstract class AbstractBlockingSession implements Session {
 
     private final int id;
+    @NotNull
     private final Socket socket;
     private final Server server;
 
+    @NotNull
     private final Executor executor;
     private DataOutputStream os;
 
@@ -37,12 +42,12 @@ public abstract class AbstractBlockingSession implements Session {
 
         try {
             os = new DataOutputStream(socket.getOutputStream());
-        } catch (final IOException e) {
+        } catch (@NotNull final IOException e) {
             closeSession(e);
         }
     }
 
-    protected void closeSession(final Exception e) {
+    protected void closeSession(@Nullable final Exception e) {
         if (e != null) {
             errors.add(e);
         }
@@ -65,14 +70,14 @@ public abstract class AbstractBlockingSession implements Session {
         // we need two block in case of error happened in one of them
         try {
             os.close();
-        } catch (final IOException e) {
+        } catch (@NotNull final IOException e) {
             errors.add(e);
             e.printStackTrace();
         }
 
         try {
             socket.close();
-        } catch (final IOException e) {
+        } catch (@NotNull final IOException e) {
             errors.add(e);
             e.printStackTrace();
         }
@@ -83,17 +88,41 @@ public abstract class AbstractBlockingSession implements Session {
         return errors.size() != 0;
     }
 
+    @NotNull
     @Override
     public List<Exception> getErrors() {
         return errors;
     }
 
-    protected void sendToClient(final byte[] buf) {
+    protected void sendToClient(@NotNull final byte[] buf) {
         executor.execute(() -> {
             try {
                 os.write(buf);
                 os.flush();
-            } catch (final IOException e) {
+            } catch (@NotNull final IOException e) {
+                closeSession(e);
+            }
+        });
+    }
+
+    protected void sendToClient(final long x) {
+        executor.execute(() -> {
+            try {
+                os.writeLong(x);
+                os.flush();
+            } catch (@NotNull final IOException e) {
+                closeSession(e);
+            }
+        });
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    protected void sendToClient(@NotNull final byte[] buf, final int offset, final int length) {
+        executor.execute(() -> {
+            try {
+                os.write(buf, offset, length);
+                os.flush();
+            } catch (@NotNull final IOException e) {
                 closeSession(e);
             }
         });
@@ -102,7 +131,7 @@ public abstract class AbstractBlockingSession implements Session {
     private void processRead() {
         try (final DataInputStream is = new DataInputStream(socket.getInputStream())) {
             processInput(is);
-        } catch (final IOException e) {
+        } catch (@NotNull final IOException e) {
             closeSession(e);
         }
     }

@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * This interface provides session methods to work with one exact client.
  */
+@SuppressWarnings("unused")
 public interface Session extends Comparable<Session>, Closeable {
 
     /**

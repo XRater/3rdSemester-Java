@@ -1,5 +1,6 @@
 import abstractServer.AbstractBlockingServer;
 import abstractServer.Session;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -27,6 +28,7 @@ public class FTPServer extends AbstractBlockingServer {
         this(DEFAULT_PORT);
     }
 
+    @NotNull
     @Override
     protected Session newSession(final Socket socket, final int number) {
         return new FTPSession(socket, number, this);
@@ -38,7 +40,7 @@ public class FTPServer extends AbstractBlockingServer {
      * @return new FTPServer on default port.
      * @throws IOException if IOException happened while creating new server.
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
     public static FTPServer init() throws IOException {
         return new FTPServer();
     }

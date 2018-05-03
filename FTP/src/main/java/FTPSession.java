@@ -1,18 +1,21 @@
 import abstractServer.AbstractBlockingSession;
 import abstractServer.Server;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
-public class FTPSession extends AbstractBlockingSession {
+class FTPSession extends AbstractBlockingSession {
 
-    FTPSession(final Socket socket, final int id, final Server server) {
+    private static final int BUF_SIZE = 2048;
+
+    FTPSession(@NotNull final Socket socket, final int id, final Server server) {
         super(socket, id, server);
     }
 
     @Override
-    protected void processInput(final DataInputStream is) throws IOException {
+    protected void processInput(@NotNull final DataInputStream is) throws IOException {
         while (true) {
             final int query = is.readInt();
             final String path = is.readUTF();
@@ -27,13 +30,13 @@ public class FTPSession extends AbstractBlockingSession {
                     closeSession(null);
                     return;
                 default:
-                    reject();
+                    // do nothing, unknown command
             }
         }
     }
 
-    private void sendList(final String path) {
-        try (final ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+    private void sendList(@NotNull final String path) {
+        try (final ByteArrayOutputStream bos = new ByteArrayOutputStream(BUF_SIZE);
              final DataOutputStream os = new DataOutputStream(bos)) {
 
             final File target = new File(path);
@@ -48,14 +51,32 @@ public class FTPSession extends AbstractBlockingSession {
             }
             sendToClient(bos.toByteArray());
 
-        } catch (final IOException e) {
-            //TODO
+        } catch (@NotNull final IOException e) {
+            closeSession(e);
         }
     }
 
-    private void sendFile(final String path) {
+    private void sendFile(@NotNull final String path) {
+        final File target = new File(path);
+        if (!target.isFile() || !target.canRead()) {
+            sendToClient(0);
+            return;
+        }
+        sendToClient(target.length());
+        final byte[] buf = new byte[BUF_SIZE];
+        try (final InputStream is = new FileInputStream(target)) {
 
+            int bytesRead;
+            while (true) {
+                bytesRead = is.read(buf);
+                if (bytesRead == -1) {
+                    break;
+                }
+                sendToClient(buf, 0, bytesRead);
+            }
+
+        } catch (@NotNull final IOException e) {
+            closeSession(e);
+        }
     }
-
-    private void reject() {}
 }

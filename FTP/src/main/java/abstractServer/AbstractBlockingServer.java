@@ -1,5 +1,7 @@
 package abstractServer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,9 +11,11 @@ import java.util.*;
 @SuppressWarnings("unused")
 public abstract class AbstractBlockingServer implements Server {
 
+    @NotNull
     private final ServerSocket server;
     private final int port;
 
+    @NotNull
     private final Thread mainThread;
 
     private volatile boolean ceaseWorking;
@@ -40,16 +44,16 @@ public abstract class AbstractBlockingServer implements Server {
      */
     @Override
     public synchronized void shutDown() {
-        if (ceaseWorking || server == null || serverClosed) {
+        if (ceaseWorking || serverClosed) {
             return;
         }
         ceaseWorking = true;
         try {
             server.close();
             mainThread.join();
-        } catch (final IOException e) {
+        } catch (@NotNull final IOException e) {
             errors.add(e);
-        } catch (final InterruptedException e) { // If we do not want to wait for shutdown
+        } catch (@NotNull final InterruptedException e) { // If we do not want to wait for shutdown
             // do nothing
         }
 
@@ -69,6 +73,7 @@ public abstract class AbstractBlockingServer implements Server {
      *
      * @return list of occurred errors.
      */
+    @NotNull
     public List<Exception> getErrors() {
         return errors;
     }
@@ -83,7 +88,7 @@ public abstract class AbstractBlockingServer implements Server {
                 socket = server.accept(); // must be closed by session
                 final Session session = newSession(socket, sessionsProcessed++);
                 handleSession(session);
-            } catch (final IOException e) {
+            } catch (@NotNull final IOException e) {
                     if (e instanceof SocketException && ceaseWorking) {
                         break; // server was turned off
                     }
@@ -97,7 +102,7 @@ public abstract class AbstractBlockingServer implements Server {
         if (!server.isClosed()) {
             try {
                 server.close();
-            } catch (final IOException e) {
+            } catch (@NotNull final IOException e) {
                 errors.add(e); // store all exceptions
             }
         }
@@ -110,7 +115,7 @@ public abstract class AbstractBlockingServer implements Server {
     }
 
     @Override
-    public void closeSession(final Session session) {
+    public void closeSession(@NotNull final Session session) {
         sessions.remove(session);
         session.close();
     }
@@ -123,7 +128,7 @@ public abstract class AbstractBlockingServer implements Server {
         }
     }
 
-    private void handleSession(final Session session) {
+    private void handleSession(@NotNull final Session session) {
         sessions.add(session);
         session.run(); // starts session
     }
