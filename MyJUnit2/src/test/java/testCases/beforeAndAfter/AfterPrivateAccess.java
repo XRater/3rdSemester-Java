@@ -1,7 +1,6 @@
 package testCases.beforeAndAfter;
 
 import annotations.After;
-import annotations.Before;
 import annotations.Test;
 
 public class AfterPrivateAccess {

@@ -4,8 +4,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 
-@SuppressWarnings("WeakerAccess")
-public class Logger {
+/**
+ * Class with some useful utils to log testing progress.
+ *
+ * The class only writing information, it does not invokes tests.
+ */
+class MyJUnitLogger {
 
     private final Class<?> clazz;
 
@@ -19,7 +23,7 @@ public class Logger {
 
     private boolean canceled;
 
-    Logger(final Class<?> clazz, final Object object) {
+    MyJUnitLogger(final Class<?> clazz, final Object object) {
         if (clazz != object.getClass()) {
             throw new IllegalArgumentException();
         }
@@ -65,7 +69,7 @@ public class Logger {
         calledMethod = null;
     }
 
-    public void logTestSkipped(@NotNull final Method method, final String reason) {
+    void logTestSkipped(@NotNull final Method method, final String reason) {
         testsSkipped++;
         System.out.println("Test \"" + colour(method.getName(), Colours.ANSI_BLUE)
                 + "\" skipped in " + localClock + " | Verdict: "
@@ -75,7 +79,7 @@ public class Logger {
         calledMethod = null;
     }
 
-    public void logTestFailed(final Method method, final Class<?> expected, final Class<?> gotten) {
+    void logTestFailed(final Method method, final Class<?> expected, final Class<?> gotten) {
         testsFailed++;
         assert(method == calledMethod);
         localClock.stop();
@@ -89,7 +93,7 @@ public class Logger {
         calledMethod = null;
     }
 
-    public void logFailedMethodSetUp(final Method method, final Throwable cause) {
+    void logFailedMethodSetUp(final Method method, final Throwable cause) {
         System.out.println("Set up was failed for method: " +
                 colour(method.getName(), Colours.ANSI_BLUE) + " with exception");
         cause.printStackTrace();
@@ -97,7 +101,7 @@ public class Logger {
         cancel();
     }
 
-    public void logFailedMethodTearDown(final Method method, final Throwable cause) {
+    void logFailedMethodTearDown(final Method method, final Throwable cause) {
         System.out.println("Tear down failed for method: " +
                 colour(method.getName(), Colours.ANSI_BLUE) + " with exception");
         cause.printStackTrace();
@@ -105,7 +109,7 @@ public class Logger {
         cancel();
     }
 
-    public void logSetUpFailed(final Method method, final Throwable cause) {
+    void logSetUpFailed(final Method method, final Throwable cause) {
         System.out.println("Exception occurred in while setting up in method " +
                 colour(method.getName(), Colours.ANSI_BLUE) + ". Testing will be stopped");
         cause.printStackTrace();

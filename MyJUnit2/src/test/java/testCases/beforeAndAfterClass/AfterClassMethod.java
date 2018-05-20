@@ -1,7 +1,6 @@
 package testCases.beforeAndAfterClass;
 
 import annotations.AfterClass;
-import annotations.BeforeClass;
 import annotations.Test;
 
 public class AfterClassMethod {

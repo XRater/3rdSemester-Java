@@ -3,8 +3,6 @@ import annotations.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 /**
@@ -15,27 +13,31 @@ import java.util.List;
  * For more information see {@link annotations.After}, {@link annotations.Before},
  * {@link annotations.AfterClass} and {@link annotations.BeforeClass} annotations.
  */
+@SuppressWarnings("WeakerAccess")
 public class MyJUnitLauncher {
 
     /**
+     * Processes testing of given class.
+     *
      * @param clazz class to test.
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
+     * @throws InvocationTargetException if any of {@link annotations.After} or {@link annotations.AfterClass} methods
+     * or class constructor had thrown an exception.
+     * @throws IllegalAccessException if access to constructor or method was denied.
+     * @throws NoSuchMethodException if class does not have default constructor.
+     * @throws InstantiationException if class was abstract.
      */
-    public static void testClass(final Class<?> clazz) throws InvocationTargetException, IllegalAccessException,
-            NoSuchMethodException, InstantiationException {
+    public static void testClass(final Class<?> clazz) throws
+            NoSuchMethodException, InstantiationException, InvocationTargetException, IllegalAccessException {
         run(clazz);
     }
 
-    private static void run(final Class<?> clazz) throws InvocationTargetException, IllegalAccessException,
-            InstantiationException, NoSuchMethodException {
+    private static void run(final Class<?> clazz) throws IllegalAccessException,
+            InstantiationException, NoSuchMethodException, InvocationTargetException {
         final Constructor<?> constructor = clazz.getDeclaredConstructor();
         constructor.setAccessible(true);
         final Object object = constructor.newInstance();
 
-        final Logger logger = new Logger(clazz, object);
+        final MyJUnitLogger logger = new MyJUnitLogger(clazz, object);
         logger.start();
 
         final MethodsCollector collector = new MethodsCollector(clazz);
@@ -53,14 +55,18 @@ public class MyJUnitLauncher {
     }
 
     @SuppressWarnings("unused")
-    private static void processAfter(final Object object, final Logger logger, final MethodsCollector collector) throws InvocationTargetException, IllegalAccessException {
+    private static void processAfter(final Object object, final MyJUnitLogger logger, final MethodsCollector collector) throws InvocationTargetException {
         for (final Method method : collector.getAfterClassMethods()) {
             method.setAccessible(true);
-            method.invoke(object);
+            try {
+                method.invoke(object);
+            } catch (final IllegalAccessException e) {
+                throw new RuntimeException();
+            }
         }
     }
 
-    private static void processBefore(final Object object, final Logger logger, final MethodsCollector collector) throws IllegalAccessException, AbortException {
+    private static void processBefore(final Object object, final MyJUnitLogger logger, final MethodsCollector collector) throws IllegalAccessException, AbortException {
         for (final Method method : collector.getBeforeClassMethods()) {
             method.setAccessible(true);
             try {
@@ -72,7 +78,7 @@ public class MyJUnitLauncher {
         }
     }
 
-    private static void processBeforeEach(final Object object, final Logger logger, final List<Method> methods) throws IllegalAccessException, AbortException {
+    private static void processBeforeEach(final Object object, final MyJUnitLogger logger, final List<Method> methods) throws IllegalAccessException, AbortException {
         for (final Method method : methods) {
             method.setAccessible(true);
             try {
@@ -84,19 +90,15 @@ public class MyJUnitLauncher {
         }
     }
 
-    private static void processAfterEach(final Object object, final Logger logger, final List<Method> methods) throws IllegalAccessException, AbortException {
+    @SuppressWarnings("unused")
+    private static void processAfterEach(final Object object, final MyJUnitLogger logger, final List<Method> methods) throws IllegalAccessException, InvocationTargetException {
         for (final Method method : methods) {
             method.setAccessible(true);
-            try {
-                method.invoke(object);
-            } catch (final InvocationTargetException inv) {
-                logger.logFailedMethodTearDown(method, inv.getCause());
-                throw new AbortException();
-            }
+            method.invoke(object);
         }
     }
 
-    private static void processTests(final Object object, final Logger logger, final MethodsCollector collector) throws IllegalAccessException {
+    private static void processTests(final Object object, final MyJUnitLogger logger, final MethodsCollector collector) throws IllegalAccessException, InvocationTargetException {
         final List<Method> beforeEach = collector.getBeforeMethods();
         final List<Method> afterEach = collector.getAfterMethods();
         for (final Method method : collector.getTestCases())  {
@@ -130,11 +132,7 @@ public class MyJUnitLauncher {
                 logger.logTestFailed(method, expected, t == null ? null : t.getClass());
             }
 
-            try {
-                processAfterEach(object, logger, afterEach);
-            } catch (final AbortException e) {
-                // skip, nothing to do here
-            }
+            processAfterEach(object, logger, afterEach);
         }
     }
 

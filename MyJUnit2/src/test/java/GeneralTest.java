@@ -1,18 +1,14 @@
 import annotations.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("WeakerAccess")
 public class GeneralTest {
