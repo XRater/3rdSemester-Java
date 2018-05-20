@@ -3,10 +3,27 @@ import annotations.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
+/**
+ * The class to run all methods marked with {@link Test} annotation in the target class.
+ *
+ * Every testing information will be printed to System.out.
+ *
+ * For more information see {@link annotations.After}, {@link annotations.Before},
+ * {@link annotations.AfterClass} and {@link annotations.BeforeClass} annotations.
+ */
 public class MyJUnitLauncher {
 
+    /**
+     * @param clazz class to test.
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     */
     public static void testClass(final Class<?> clazz) throws InvocationTargetException, IllegalAccessException,
             NoSuchMethodException, InstantiationException {
         run(clazz);
@@ -35,6 +52,7 @@ public class MyJUnitLauncher {
         logger.finish();
     }
 
+    @SuppressWarnings("unused")
     private static void processAfter(final Object object, final Logger logger, final MethodsCollector collector) throws InvocationTargetException, IllegalAccessException {
         for (final Method method : collector.getAfterClassMethods()) {
             method.setAccessible(true);
@@ -42,7 +60,7 @@ public class MyJUnitLauncher {
         }
     }
 
-    private static void processBefore(final Object object, final Logger logger, final MethodsCollector collector) throws InvocationTargetException, IllegalAccessException, AbortException {
+    private static void processBefore(final Object object, final Logger logger, final MethodsCollector collector) throws IllegalAccessException, AbortException {
         for (final Method method : collector.getBeforeClassMethods()) {
             method.setAccessible(true);
             try {
@@ -120,6 +138,9 @@ public class MyJUnitLauncher {
         }
     }
 
+    /**
+     * This exception is used when any exception occurred during Before/After methods.
+     */
     private static class AbortException extends Throwable {
     }
 }

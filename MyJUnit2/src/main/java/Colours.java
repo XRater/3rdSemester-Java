@@ -1,3 +1,7 @@
+/**
+ * This class is used to create coloured output. One of defined inside colours can be used.
+ */
+@SuppressWarnings("WeakerAccess")
 class Colours {
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -9,6 +13,9 @@ class Colours {
     public static final String ANSI_WHITE = "\u001B[37m";
     public static final String ANSI_RESET = "\u001B[0m";
 
+    /**
+     * The method returns all supported colours.
+     */
     public static String[] getColours() {
         return new String[]{ANSI_BLACK, ANSI_BLUE, ANSI_CYAN, ANSI_RED,
                 ANSI_RESET, ANSI_GREEN, ANSI_YELLOW, ANSI_WHITE, ANSI_PURPLE};
