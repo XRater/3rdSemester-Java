@@ -137,4 +137,8 @@ public abstract class AbstractBlockingSession implements Session {
     }
 
     protected abstract void processInput(final DataInputStream is) throws IOException;
+
+    protected void addTask(final Runnable task) {
+        server.getPool().execute(task);
+    }
 }

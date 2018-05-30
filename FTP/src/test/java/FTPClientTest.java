@@ -1,3 +1,4 @@
+import abstractServer.Utils;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,10 @@ class FTPClientTest {
     @Test
     void testListEmpty() throws IOException {
         Utils.clear();
-        testListWithContent(Map.of());
-        testListWithContent(Map.of("file1", false));
-        testListWithContent(Map.of("file1", true));
-        testListWithContent(Map.of("file1", true, "file2", false));
+        testListWithContent(Utils.map());
+        testListWithContent(Utils.map("file1", false));
+        testListWithContent(Utils.map("file1", true));
+        testListWithContent(Utils.map("file1", true, "file2", false));
     }
 
     private void testListWithContent(@NotNull final Map<String, Boolean> files) throws IOException {

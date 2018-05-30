@@ -1,5 +1,7 @@
 package abstractServer;
 
+import java.util.concurrent.Executor;
+
 /**
  * Server interface. Might have different architectures.
  */
@@ -16,4 +18,6 @@ public interface Server {
      * Call this method to close one exact session.
      */
     void closeSession(Session session);
+
+    Executor getPool();
 }

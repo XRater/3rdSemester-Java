@@ -1,5 +1,6 @@
 import abstractServer.AbstractBlockingSession;
 import abstractServer.Server;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -21,10 +22,10 @@ class FTPSession extends AbstractBlockingSession {
             final String path = is.readUTF();
             switch (query) {
                 case 1:
-                    sendList(path);
+                    addTask(() -> sendList(path));
                     break;
                 case 2:
-                    sendFile(path);
+                    addTask(() -> sendFile(path));
                     break;
                 case 3:
                     closeSession(null);
@@ -65,7 +66,6 @@ class FTPSession extends AbstractBlockingSession {
         sendToClient(target.length());
         final byte[] buf = new byte[BUF_SIZE];
         try (final InputStream is = new FileInputStream(target)) {
-
             int bytesRead;
             while (true) {
                 bytesRead = is.read(buf);

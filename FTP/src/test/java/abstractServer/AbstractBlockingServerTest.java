@@ -49,7 +49,7 @@ class AbstractBlockingServerTest {
         assertThat(server.getErrors(), is(empty()));
         assertThat(server.session().stream()
                         .map(DummySession::lines).collect(Collectors.toList()),
-                everyItem(is(List.of("42", "17", "46", "14", "22", "134"))));
+                everyItem(is(Utils.list("42", "17", "46", "14", "22", "134"))));
 
         assertThat(server.session().stream()
                 .map(DummySession::getErrors).collect(Collectors.toList()),

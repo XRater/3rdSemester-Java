@@ -1,7 +1,9 @@
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.FileAlreadyExistsException;
 
 /**
  * This class provides methods to work with FTPServer. These are:
@@ -87,13 +89,7 @@ public class FTPClient {
         final byte[] buf = new byte[BUF_SIZE];
         try (final FileOutputStream os = new FileOutputStream(file)) {
             final long size = is.readLong();
-            int readSize = 0;
-            int bytesRead;
-            while (readSize != size) {
-                bytesRead = is.read(buf);
-                readSize += bytesRead;
-                os.write(buf, 0, bytesRead);
-            }
+            IOUtils.copyLarge(is, os, 0, size);
         }
     }
 

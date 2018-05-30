@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("unused")
 public abstract class AbstractBlockingServer implements Server {
@@ -24,6 +26,8 @@ public abstract class AbstractBlockingServer implements Server {
     private final Set<Session> sessions = new TreeSet<>();
     private int sessionsProcessed = 0;
     private final List<Exception> errors = new ArrayList<>();
+
+    private final Executor pool = Executors.newCachedThreadPool();
 
     protected AbstractBlockingServer(final int port) throws IOException {
         server = new ServerSocket(port);
@@ -76,6 +80,10 @@ public abstract class AbstractBlockingServer implements Server {
     @NotNull
     public List<Exception> getErrors() {
         return errors;
+    }
+
+    public Executor getPool() {
+        return pool;
     }
 
     private void work() {

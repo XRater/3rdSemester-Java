@@ -1,8 +1,11 @@
+package abstractServer;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Utils {
@@ -51,5 +54,18 @@ public class Utils {
         final File file = createFile(proxy, lines);
         file.deleteOnExit();
         return file;
+    }
+
+    @SafeVarargs
+    public static <T> List<T> list(final T... values) {
+        return Arrays.asList(values);
+    }
+
+    public static Map<String, Boolean> map(final Object... elements) {
+        final Map<String, Boolean> result = new TreeMap<>();
+        for (int i = 0; i < elements.length; i++) {
+            result.put((String) elements[i], (Boolean) elements[++i]);
+        }
+        return result;
     }
 }
