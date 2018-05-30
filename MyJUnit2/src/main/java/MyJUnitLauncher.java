@@ -1,9 +1,17 @@
 import annotations.Test;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The class to run all methods marked with {@link Test} annotation in the target class.
@@ -15,6 +23,28 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class MyJUnitLauncher {
+
+    public static void main(final String[] args) throws IOException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (args.length != 1) {
+            System.out.println("Give path to directory with tests as argument");
+            return;
+        }
+
+        testPath(Paths.get(args[0]));
+    }
+
+    private static void testPath(final Path path) throws IOException, ClassNotFoundException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException, InvocationTargetException {
+        for (final Path subPath : Files.walk(path).collect(Collectors.toList())) {
+            final String name = subPath.getFileName().toString();
+            if (name.endsWith(".class")) {
+                @NotNull final URL url = new URL("file:" + subPath.getParent() + "/");
+                @NotNull final ClassLoader classLoader = new URLClassLoader(new URL[]{url});
+                final Class<?> clazz =  classLoader.loadClass(name.substring(0, name.length() - ".class".length()));
+                testClass(clazz);
+            }
+        }
+    }
 
     /**
      * Processes testing of given class.
