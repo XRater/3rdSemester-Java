@@ -2,16 +2,16 @@ package com.mit.spbau.kirakosian.options.impl;
 
 import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
 
-public class ArraySize implements ParameterOptionMeta {
+public class QueriesNumber implements ParameterOptionMeta {
 
     @Override
     public String name() {
-        return "Array size";
+        return "Number of queries";
     }
 
     @Override
     public String description() {
-        return "Size of array for each query";
+        return "Number of queries from each client";
     }
 
     @Override
@@ -21,6 +21,6 @@ public class ArraySize implements ParameterOptionMeta {
 
     @Override
     public int maxValue() {
-        return 100000;
+        return 100;
     }
 }
