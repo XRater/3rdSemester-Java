@@ -9,8 +9,13 @@ public class ServerTest {
 
     public static void test(final Servers.ServerType serverType, final Map<ParameterOptionMeta, Integer> options) {
         System.out.println(serverType.name());
-        for (Map.Entry<ParameterOptionMeta, Integer> entry : options.entrySet()) {
+        for (final Map.Entry<ParameterOptionMeta, Integer> entry : options.entrySet()) {
             System.out.println(entry.getKey().name() + " " + entry.getValue());
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (final InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

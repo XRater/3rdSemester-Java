@@ -18,7 +18,8 @@ public class SettingsWindow extends Window {
     public SettingsWindow() {
         super();
         final JButton startButton = new JButton("Start server test");
-        startButton.addActionListener(e -> ServerTest.test(serverType, options));
+        startButton.addActionListener(e ->
+                new Thread(() -> ServerTest.test(serverType, options)).start());
         final JPanel settingsPanel = createSettingsPanel();
 
         mainPanel.add(settingsPanel);
