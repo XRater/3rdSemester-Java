@@ -9,4 +9,6 @@ public interface ParameterOptionMeta {
     int maxValue();
 
     String description();
+
+    boolean mayAlter();
 }

@@ -23,4 +23,9 @@ public class TimeSpace implements ParameterOptionMeta {
     public int maxValue() {
         return 10_000;
     }
+
+    @Override
+    public boolean mayAlter() {
+        return true;
+    }
 }

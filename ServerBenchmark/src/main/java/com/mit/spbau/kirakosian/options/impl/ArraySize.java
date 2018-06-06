@@ -23,4 +23,9 @@ public class ArraySize implements ParameterOptionMeta {
     public int maxValue() {
         return 100000;
     }
+
+    @Override
+    public boolean mayAlter() {
+        return true;
+    }
 }

@@ -23,4 +23,9 @@ public class ClientsNumber implements ParameterOptionMeta {
     public int maxValue() {
         return 40;
     }
+
+    @Override
+    public boolean mayAlter() {
+        return true;
+    }
 }

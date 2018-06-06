@@ -23,4 +23,9 @@ public class QueriesNumber implements ParameterOptionMeta {
     public int maxValue() {
         return 100;
     }
+
+    @Override
+    public boolean mayAlter() {
+        return false;
+    }
 }
