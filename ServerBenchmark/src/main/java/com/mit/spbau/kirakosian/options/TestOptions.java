@@ -1,13 +1,21 @@
 package com.mit.spbau.kirakosian.options;
 
+import com.mit.spbau.kirakosian.ServerTest;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Stores all chosen in GUI options. This class is used to pass these options fro, GUI to logic.
+ * Every required by logic option should must be set.
+ *
+ * Also any valid option class must be taken correctly by logic. See {@link TestOptions#validate()}
+ * method for more information.
+ */
 public class TestOptions {
 
-    private final Map<ParameterOptionMeta, Integer> options = new HashMap<>();
+    private final Map<Class<? extends ParameterOptionMeta>, Integer> options = new HashMap<>();
     private Servers.ServerType serverType;
 
     private ParameterOptionMeta alteringOption;
@@ -15,7 +23,7 @@ public class TestOptions {
     private int upperBound;
     private int delta;
 
-    public Map<ParameterOptionMeta, Integer> options() {
+    public Map<Class<? extends ParameterOptionMeta>, Integer> options() {
         return options;
     }
 
@@ -59,8 +67,12 @@ public class TestOptions {
         this.delta = delta;
     }
 
-    public void setOption(final ParameterOptionMeta option, final Integer value) {
+    public void setOption(final Class<? extends ParameterOptionMeta> option, final Integer value) {
         options.put(option, value);
+    }
+
+    public Integer getOption(final Class<? extends ParameterOptionMeta> meta) {
+        return options.get(meta);
     }
 
     /**
@@ -70,6 +82,11 @@ public class TestOptions {
      * @return string with error message or null if data was legal.
      */
     public String validate() {
+        for (final Class<? extends ParameterOptionMeta> option : ServerTest.getRequiredOptions()) {
+            if (options.get(option) == null && alteringOption.getClass() != option) {
+                return "Option " + option.getSimpleName() + " was not provided";
+            }
+        }
         if (alteringOption == null) {
             return "No altering property was provided";
         }

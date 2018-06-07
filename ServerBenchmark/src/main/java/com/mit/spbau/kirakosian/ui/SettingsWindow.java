@@ -204,9 +204,9 @@ public class SettingsWindow extends Window {
                 } catch (final NumberFormatException e) {
                     throw new IllegalOptionsException(e);
                 }
-                options.setOption(option, null);
+                options.setOption(option.getClass(), null);
             } else {
-                options.setOption(option, slider.getValue());
+                options.setOption(option.getClass(), slider.getValue());
             }
         }
     }

@@ -8,12 +8,15 @@ import com.mit.spbau.kirakosian.options.impl.TimeSpace;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class represents options supported by GUI. Not all described options/metrics might be
+ * supported by logic.
+ */
 public class GeneralOptions {
 
     private static final List<ParameterOptionMeta> options = new ArrayList<>();
