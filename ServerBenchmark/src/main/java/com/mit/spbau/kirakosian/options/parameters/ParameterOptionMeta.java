@@ -1,4 +1,4 @@
-package com.mit.spbau.kirakosian.options;
+package com.mit.spbau.kirakosian.options.parameters;
 
 public interface ParameterOptionMeta {
 

@@ -1,8 +1,9 @@
 package com.mit.spbau.kirakosian.ui.scenes;
 
-import com.mit.spbau.kirakosian.ServerTest;
-import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
-import com.mit.spbau.kirakosian.options.GeneralOptions;
+import com.mit.spbau.kirakosian.testing.ServerTestInitializer;
+import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
+import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
+import com.mit.spbau.kirakosian.options.UIOptions;
 import com.mit.spbau.kirakosian.options.TestOptions;
 import com.mit.spbau.kirakosian.servers.Servers;
 import com.mit.spbau.kirakosian.ui.Scene;
@@ -21,13 +22,13 @@ public class SettingsScene extends Scene {
 
     public SettingsScene() {
         super();
-        final JButton startButton = new JButton("Start server test");
+        final JButton startButton = new JButton("Start server startTest");
         startButton.addActionListener(e ->
         {
-            TestOptions testOptions;
+            final TestOptions testOptions;
             try {
                 testOptions = collectOptions();
-            } catch (IllegalOptionsException e1) {
+            } catch (final IllegalOptionsException e1) {
                 JOptionPane.showMessageDialog(null,
                         "Error: Invalid options were set. Only integer values are allowed", "Error Message",
                         JOptionPane.ERROR_MESSAGE);
@@ -42,7 +43,7 @@ public class SettingsScene extends Scene {
                 return;
             }
             SceneManager.setScene(SceneManager.TESTING_SCENE);
-            new Thread(() -> ServerTest.test(testOptions)).start();
+            new Thread(() -> ServerTestInitializer.startTest(testOptions)).start();
         });
         final JPanel settingsPanel = createSettingsPanel();
 
@@ -52,6 +53,9 @@ public class SettingsScene extends Scene {
 
     private TestOptions collectOptions() throws IllegalOptionsException {
         final TestOptions options = new TestOptions();
+        for (final Class<? extends MetricMeta> meta : UIOptions.metrics()) {
+            options.addMetric(meta);
+        }
         options.setServerType((Servers.ServerType) comboBox.getSelectedItem());
         for (final OptionPanel panel : optionPanels) {
             panel.collectOptions(options);
@@ -66,7 +70,7 @@ public class SettingsScene extends Scene {
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
 
         optionsPanel.add(Box.createVerticalGlue());
-        for (final ParameterOptionMeta option : GeneralOptions.options()) {
+        for (final ParameterOptionMeta option : UIOptions.options()) {
             final OptionPanel panel = new OptionPanel(option);
             optionPanels.add(panel);
             optionsPanel.add(panel);
@@ -80,7 +84,7 @@ public class SettingsScene extends Scene {
 
     private Component createServerTypeOption() {
         final JComboBox<Servers.ServerType> comboBox = new JComboBox<>();
-        for (final Servers.ServerType option : GeneralOptions.serverOptions()) {
+        for (final Servers.ServerType option : UIOptions.serverOptions()) {
             comboBox.addItem(option);
         }
         ((JLabel)comboBox.getRenderer()).setHorizontalAlignment(JLabel.CENTER);

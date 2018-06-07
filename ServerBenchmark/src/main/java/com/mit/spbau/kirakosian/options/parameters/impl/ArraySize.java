@@ -1,17 +1,17 @@
-package com.mit.spbau.kirakosian.options.impl;
+package com.mit.spbau.kirakosian.options.parameters.impl;
 
-import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
+import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 
-public class TimeSpace implements ParameterOptionMeta {
+public class ArraySize implements ParameterOptionMeta {
 
     @Override
     public String name() {
-        return "Time space between queries";
+        return "Array size";
     }
 
     @Override
     public String description() {
-        return "Time before responce from server and new query";
+        return "Size of array for each query";
     }
 
     @Override
@@ -21,7 +21,7 @@ public class TimeSpace implements ParameterOptionMeta {
 
     @Override
     public int maxValue() {
-        return 10_000;
+        return 100000;
     }
 
     @Override

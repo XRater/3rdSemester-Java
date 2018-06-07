@@ -12,7 +12,4 @@ public abstract class Scene extends JPanel {
 
         setVisible(false);
     }
-
-    protected void onShow() {
-    }
 }

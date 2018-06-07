@@ -1,10 +1,14 @@
 package com.mit.spbau.kirakosian.options;
 
-import com.mit.spbau.kirakosian.ServerTest;
+import com.mit.spbau.kirakosian.testing.ServerTestInitializer;
+import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
+import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Stores all chosen in GUI options. This class is used to pass these options fro, GUI to logic.
@@ -17,6 +21,8 @@ public class TestOptions {
 
     private final Map<Class<? extends ParameterOptionMeta>, Integer> options = new HashMap<>();
     private Servers.ServerType serverType;
+
+    private final Set<Class<? extends MetricMeta>> metrics = new HashSet<>();
 
     private ParameterOptionMeta alteringOption;
     private int lowerBound;
@@ -75,6 +81,18 @@ public class TestOptions {
         return options.get(meta);
     }
 
+    public void addMetric(final Class<? extends MetricMeta> metric) {
+        metrics.add(metric);
+    }
+
+    public boolean requiresMetric(Class<? extends MetricMeta> metric) {
+        return metrics.contains(metric);
+    }
+
+    public Set<Class<? extends MetricMeta>> metrics() {
+        return metrics;
+    }
+
     /**
      * The method checks if provided options are legal (for example, altering
      * property was provided).
@@ -82,9 +100,14 @@ public class TestOptions {
      * @return string with error message or null if data was legal.
      */
     public String validate() {
-        for (final Class<? extends ParameterOptionMeta> option : ServerTest.getRequiredOptions()) {
+        for (final Class<? extends ParameterOptionMeta> option : ServerTestInitializer.getRequiredOptions()) {
             if (options.get(option) == null && alteringOption.getClass() != option) {
                 return "Option " + option.getSimpleName() + " was not provided";
+            }
+        }
+        for (final Class<? extends MetricMeta> metric : metrics) {
+            if (!ServerTestInitializer.getSupportedMetrics().contains(metric)) {
+                return "Metric " + metric.getSimpleName() + " is unsupported";
             }
         }
         if (alteringOption == null) {

@@ -1,6 +1,6 @@
-package com.mit.spbau.kirakosian.options.impl;
+package com.mit.spbau.kirakosian.options.parameters.impl;
 
-import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
+import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 
 public class ClientsNumber implements ParameterOptionMeta {
 

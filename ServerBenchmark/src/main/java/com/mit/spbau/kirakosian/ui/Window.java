@@ -25,7 +25,6 @@ public class Window extends JFrame {
     public void setScene(final Scene scene) {
         currentScene.setVisible(false);
         scene.setVisible(true);
-        scene.onShow();
         setContentPane(scene);
         revalidate();
         currentScene = scene;
