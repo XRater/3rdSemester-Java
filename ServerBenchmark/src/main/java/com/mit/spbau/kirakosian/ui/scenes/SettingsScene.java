@@ -1,49 +1,53 @@
-package com.mit.spbau.kirakosian.ui;
+package com.mit.spbau.kirakosian.ui.scenes;
 
 import com.mit.spbau.kirakosian.ServerTest;
 import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
 import com.mit.spbau.kirakosian.options.GeneralOptions;
 import com.mit.spbau.kirakosian.options.TestOptions;
 import com.mit.spbau.kirakosian.servers.Servers;
+import com.mit.spbau.kirakosian.ui.Scene;
+import com.mit.spbau.kirakosian.ui.SceneManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
-public class SettingsWindow extends Window {
+public class SettingsScene extends Scene {
 
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private JComboBox<Servers.ServerType> comboBox;
     private final java.util.List<OptionPanel> optionPanels = new ArrayList<>();
 
-    public SettingsWindow() {
+    public SettingsScene() {
         super();
         final JButton startButton = new JButton("Start server test");
         startButton.addActionListener(e ->
-                new Thread(() ->  {
-                    TestOptions testOptions;
-                    try {
-                        testOptions = collectOptions();
-                    } catch (IllegalOptionsException e1) {
-                        JOptionPane.showMessageDialog(null,
-                                "Error: Invalid options were set. Only integer values are allowed", "Error Message",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    String error = testOptions.validate();
-                    if (error != null) {
-                        JOptionPane.showMessageDialog(null,
-                                "Error: " + error, "Error Message",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    ServerTest.test(testOptions);
-                }).start());
+        {
+            TestOptions testOptions;
+            try {
+                testOptions = collectOptions();
+            } catch (IllegalOptionsException e1) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: Invalid options were set. Only integer values are allowed", "Error Message",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+//            String error = testOptions.validate();
+            String error = null;
+            if (error != null) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: " + error, "Error Message",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            SceneManager.setScene(SceneManager.TESTING_SCENE);
+            new Thread(() -> ServerTest.test(testOptions)).start();
+        });
         final JPanel settingsPanel = createSettingsPanel();
 
-        mainPanel.add(settingsPanel);
-        mainPanel.add(startButton, BorderLayout.SOUTH);
+        add(settingsPanel);
+        add(startButton, BorderLayout.SOUTH);
     }
 
     private TestOptions collectOptions() throws IllegalOptionsException {

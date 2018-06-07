@@ -1,5 +1,6 @@
 package com.mit.spbau.kirakosian;
 
+import com.mit.spbau.kirakosian.controller.Controller;
 import com.mit.spbau.kirakosian.options.ParameterOptionMeta;
 import com.mit.spbau.kirakosian.options.TestOptions;
 import com.mit.spbau.kirakosian.options.impl.ArraySize;
@@ -31,16 +32,18 @@ public class ServerTest {
         for (final Map.Entry<Class<? extends ParameterOptionMeta>, Integer> entry : options.options().entrySet()) {
             System.out.println(entry.getKey().getName() + " " + entry.getValue());
         }
-        System.out.println(options.alteringOption().name());
-        System.out.println(options.lowerBound());
-        System.out.println(options.upperBound());
-        System.out.println(options.delta());
+//        System.out.println(options.alteringOption().name());
+//        System.out.println(options.lowerBound());
+//        System.out.println(options.upperBound());
+//        System.out.println(options.delta());
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
 
+        Controller.calculationsCompleted();
+        System.out.println("Completed");
     }
 
 }

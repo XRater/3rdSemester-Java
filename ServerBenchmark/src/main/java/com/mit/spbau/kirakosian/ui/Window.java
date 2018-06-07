@@ -1,22 +1,33 @@
 package com.mit.spbau.kirakosian.ui;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public abstract class Window extends JFrame {
+public class Window extends JFrame {
 
     @SuppressWarnings("WeakerAccess")
-    protected JPanel mainPanel = new JPanel();
+    @NotNull private Scene currentScene;
 
-    protected Window() {
+    public Window() {
         super("Server Benchmark");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setSize(new Dimension(500, 600));
 
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        mainPanel.setLayout(new BorderLayout());
-        setContentPane(mainPanel);
+        currentScene = SceneManager.SETTINGS_SCENE;
+        currentScene.setVisible(true);
+        setContentPane(currentScene);
+    }
+
+
+    public void setScene(final Scene scene) {
+        currentScene.setVisible(false);
+        scene.setVisible(true);
+        scene.onShow();
+        setContentPane(scene);
+        revalidate();
+        currentScene = scene;
     }
 }
