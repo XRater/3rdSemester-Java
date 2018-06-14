@@ -9,13 +9,13 @@ import java.net.Socket;
 
 import static com.mit.spbau.kirakosian.connector.Protocol.*;
 
-public class Client {
+public class TestingClient {
 
     private final TestOptions options;
     final private ObjectOutputStream os;
     final private ObjectInputStream is;
 
-    private Client() throws IOException, ClassNotFoundException {
+    private TestingClient() throws IOException, ClassNotFoundException {
         final Socket socket = new Socket("localhost", ApplicationConnector.APPLICATION_PORT);
         os = new ObjectOutputStream(socket.getOutputStream());
         is = new ObjectInputStream(socket.getInputStream());
@@ -35,14 +35,16 @@ public class Client {
                 throw new UnexpectedProtocolMessageException();
             }
 
-            // one test here
+            final ArrayClient client = new ArrayClient();
+            client.work(10);
 
-           os.writeInt(END_TEST_CASE);
+            os.writeInt(END_TEST_CASE);
+            os.flush();
         }
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Client client = new Client();
+        TestingClient client = new TestingClient();
         client.startTest();
     }
 

@@ -2,6 +2,7 @@ package com.mit.spbau.kirakosian.testing;
 
 import com.mit.spbau.kirakosian.connector.ApplicationConnector;
 import com.mit.spbau.kirakosian.options.TestOptions;
+import com.mit.spbau.kirakosian.options.metrics.impl.TaskTime;
 import com.mit.spbau.kirakosian.servers.Server;
 import com.mit.spbau.kirakosian.servers.Servers;
 
@@ -21,32 +22,35 @@ class ServerTest {
      */
     void startTest(final TestResults results) throws IOException {
         // set up server
-        final Server server = Servers.createServer(options.serverType());
 //        server.setServerActionListener(stats);
         stats.clear();
 
         // wait for second application
         final ApplicationConnector connector = new ApplicationConnector(options, stats);
         connector.waitForNewClient();
-/*
+        System.out.println("Starting");
+
         for (int currentValue = options.lowerBound();
              currentValue <= options.upperBound();
              currentValue += options.delta()) {
 
-            server.init();
+            final Server server = Servers.createServer(options.serverType());
+            server.setServerActionListener(stats);
+            server.start();
+
+            System.out.println("Test case " + currentValue);
             connector.startTestCase();
 
-            stats.getReady(); // waiting for test end
-
             server.shutDown();
-            updateResult(results);
+            updateResult(results, currentValue);
             stats.clear();
         }
-*/
+
+        System.out.println("End of testing");
     }
 
-    private void updateResult(final TestResults results) {
-        //TODO
+    private void updateResult(final TestResults results, final int value) {
+        results.addPoint(TaskTime.class, value, (int) stats.getTaskTime());
     }
 
 }

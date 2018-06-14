@@ -52,7 +52,7 @@ public class ServerTestInitializer {
             Controller.cancel();
         }
 
-//        Controller.calculationsCompleted(results);
+        Controller.calculationsCompleted(results);
     }
 
     public static void main(String[] args) {

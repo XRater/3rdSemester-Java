@@ -40,10 +40,13 @@ public class ApplicationConnector {
 
         os.writeInt(OPTIONS);
         os.writeObject(options);
+        os.flush();
+
     }
 
     public void startTestCase() throws IOException {
         os.writeInt(START_TEST_CASE);
+        os.flush();
 
         int signal;
         signal = is.readInt();
@@ -54,5 +57,6 @@ public class ApplicationConnector {
         } else {
             throw new UnexpectedProtocolMessageException();
         }
+
     }
 }
