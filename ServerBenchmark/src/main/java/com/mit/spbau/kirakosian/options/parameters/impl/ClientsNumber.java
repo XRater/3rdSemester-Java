@@ -16,12 +16,12 @@ public class ClientsNumber implements ParameterOptionMeta {
 
     @Override
     public int minValue() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int maxValue() {
-        return 40;
+        return 41;
     }
 
     @Override

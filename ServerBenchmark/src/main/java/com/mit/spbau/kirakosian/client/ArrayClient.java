@@ -21,17 +21,22 @@ public class ArrayClient {
     }
 
 
-    public void work(final int number) throws IOException {
-        for (int i = 0; i < number; i++) {
-            final int[] array = Utils.generate(1000);
+    public void work(final int queries, final int size, final int delay) throws IOException {
+        for (int i = 0; i < queries; i++) {
+            final int[] array = Utils.generate(size);
 
             os.writeInt(NEW_QUERY);
             Utils.writeArray(os, array);
             os.flush();
 
             final int[] result = Utils.readArray(is);
+//            System.out.println(Arrays.toString(result));
 
-            System.out.println(Arrays.toString(result));
+            try {
+                Thread.sleep(delay);
+            } catch (final InterruptedException e) {
+                // TODO
+            }
         }
         os.writeInt(STOP);
         os.flush();

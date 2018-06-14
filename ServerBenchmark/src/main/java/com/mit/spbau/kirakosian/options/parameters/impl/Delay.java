@@ -2,7 +2,7 @@ package com.mit.spbau.kirakosian.options.parameters.impl;
 
 import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 
-public class TimeSpace implements ParameterOptionMeta {
+public class Delay implements ParameterOptionMeta {
 
     @Override
     public String name() {

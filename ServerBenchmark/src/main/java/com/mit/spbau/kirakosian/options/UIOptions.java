@@ -9,7 +9,7 @@ import com.mit.spbau.kirakosian.options.parameters.*;
 import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.QueriesNumber;
-import com.mit.spbau.kirakosian.options.parameters.impl.TimeSpace;
+import com.mit.spbau.kirakosian.options.parameters.impl.Delay;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,8 +31,8 @@ public class UIOptions {
 
     static {
         serverTypes.add(Servers.ServerType.Simple);
-        serverTypes.add(Servers.ServerType.Blocking);
-        serverTypes.add(Servers.ServerType.NonBlocking);
+//        serverTypes.add(Servers.ServerType.Blocking);
+//        serverTypes.add(Servers.ServerType.NonBlocking);
 
         metrics.add(ServerTime.class);
         metrics.add(ClientTime.class);
@@ -40,7 +40,7 @@ public class UIOptions {
         try {
             registerOption(ArraySize.class);
             registerOption(ClientsNumber.class);
-            registerOption(TimeSpace.class);
+            registerOption(Delay.class);
             registerOption(QueriesNumber.class);
         } catch (final NoSuchMethodException | InvocationTargetException |
                 IllegalAccessException | InstantiationException e) {

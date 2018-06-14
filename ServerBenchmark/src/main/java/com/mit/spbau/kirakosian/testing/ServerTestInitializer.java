@@ -10,7 +10,7 @@ import com.mit.spbau.kirakosian.options.TestOptions;
 import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.QueriesNumber;
-import com.mit.spbau.kirakosian.options.parameters.impl.TimeSpace;
+import com.mit.spbau.kirakosian.options.parameters.impl.Delay;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class ServerTestInitializer {
     static {
         requiredOptions.add(ArraySize.class);
         requiredOptions.add(ClientsNumber.class);
-        requiredOptions.add(TimeSpace.class);
+        requiredOptions.add(Delay.class);
         requiredOptions.add(QueriesNumber.class);
 
         supportedMetrics.add(TaskTime.class);
@@ -44,6 +44,7 @@ public class ServerTestInitializer {
     }
 
     public static void startTest(final TestOptions options) {
+        options.print();
         final ServerTest serverTest = new ServerTest(options);
         final TestResults results = new TestResults(options);
         try {
@@ -60,7 +61,7 @@ public class ServerTestInitializer {
         options.setAlteringOptionMeta(ClientsNumber.class);
         options.setOption(QueriesNumber.class, 10);
         options.setOption(ArraySize.class, 10000);
-        options.setOption(TimeSpace.class, 10);
+        options.setOption(Delay.class, 10);
         options.setDelta(1);
         options.setLowerBound(1);
         options.setUpperBound(10);
@@ -72,7 +73,6 @@ public class ServerTestInitializer {
             return;
         }
 
-        options.print();
         startTest(options);
     }
 }

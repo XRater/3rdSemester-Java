@@ -6,7 +6,7 @@ public class ArraySize implements ParameterOptionMeta {
 
     @Override
     public String name() {
-        return "Array size";
+        return "Array arraySize";
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ArraySize implements ParameterOptionMeta {
 
     @Override
     public int maxValue() {
-        return 100000;
+        return 10000;
     }
 
     @Override

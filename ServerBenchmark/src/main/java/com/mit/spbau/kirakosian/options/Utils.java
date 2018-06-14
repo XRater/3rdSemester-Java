@@ -8,7 +8,7 @@ import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.QueriesNumber;
-import com.mit.spbau.kirakosian.options.parameters.impl.TimeSpace;
+import com.mit.spbau.kirakosian.options.parameters.impl.Delay;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class Utils {
         try {
             registerOption(ArraySize.class);
             registerOption(ClientsNumber.class);
-            registerOption(TimeSpace.class);
+            registerOption(Delay.class);
             registerOption(QueriesNumber.class);
 
             registerMetric(ClientTime.class);
