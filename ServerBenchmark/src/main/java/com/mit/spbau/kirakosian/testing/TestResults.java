@@ -15,7 +15,7 @@ public class TestResults {
 
     public TestResults(final TestOptions options) {
         this.options = options;
-        for (Class<? extends MetricMeta> meta : options.metrics()) {
+        for (final Class<? extends MetricMeta> meta : options.metrics()) {
             results.put(meta, new MetricResult(meta));
         }
     }
@@ -25,7 +25,9 @@ public class TestResults {
     }
 
     public void addPoint(final Class<? extends MetricMeta> meta, final Integer parameter, final Integer value) {
-        results.get(meta).addResult(parameter, value);
+        if (results.containsKey(meta)) {
+            results.get(meta).addResult(parameter, value);
+        }
     }
 
     public MetricResult getResultsForMetric(final Class<? extends MetricMeta> meta) {

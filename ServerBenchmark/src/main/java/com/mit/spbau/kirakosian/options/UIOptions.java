@@ -3,7 +3,8 @@ package com.mit.spbau.kirakosian.options;
 
 import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
 import com.mit.spbau.kirakosian.options.metrics.impl.ClientTime;
-import com.mit.spbau.kirakosian.options.metrics.impl.QueryTime;
+import com.mit.spbau.kirakosian.options.metrics.impl.ServerTime;
+import com.mit.spbau.kirakosian.options.metrics.impl.TaskTime;
 import com.mit.spbau.kirakosian.options.parameters.*;
 import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
@@ -29,11 +30,13 @@ public class UIOptions {
     private static final List<Class<? extends MetricMeta>> metrics = new ArrayList<>();
 
     static {
+        serverTypes.add(Servers.ServerType.Simple);
         serverTypes.add(Servers.ServerType.Blocking);
         serverTypes.add(Servers.ServerType.NonBlocking);
 
+        metrics.add(ServerTime.class);
         metrics.add(ClientTime.class);
-        metrics.add(QueryTime.class);
+        metrics.add(TaskTime.class);
         try {
             registerOption(ArraySize.class);
             registerOption(ClientsNumber.class);

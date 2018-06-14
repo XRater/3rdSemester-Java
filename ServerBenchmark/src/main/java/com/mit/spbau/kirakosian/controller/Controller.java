@@ -12,4 +12,7 @@ public class Controller {
         SwingUtilities.invokeLater(() -> SceneManager.setScene(SceneManager.RESULTS_SCENE));
     }
 
+    public static void cancel() {
+
+    }
 }

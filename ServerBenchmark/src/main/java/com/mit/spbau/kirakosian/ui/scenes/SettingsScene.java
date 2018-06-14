@@ -204,7 +204,7 @@ public class SettingsScene extends Scene {
         @SuppressWarnings("WeakerAccess")
         public void collectOptions(final TestOptions options) throws IllegalOptionsException {
             if (altering) {
-                options.setAlteringOption(option);
+                options.setAlteringOptionMeta(option.getClass());
                 try {
                     options.setLowerBound(Integer.parseInt(lowerBound.getText()));
                     options.setUpperBound(Integer.parseInt(upperBound.getText()));

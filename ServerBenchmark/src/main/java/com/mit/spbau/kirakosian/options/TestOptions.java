@@ -5,6 +5,7 @@ import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
 import com.mit.spbau.kirakosian.options.parameters.ParameterOptionMeta;
 import com.mit.spbau.kirakosian.servers.Servers;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,14 +18,14 @@ import java.util.Set;
  * Also any valid option class must be taken correctly by logic. See {@link TestOptions#validate()}
  * method for more information.
  */
-public class TestOptions {
+public class TestOptions implements Serializable {
 
     private final Map<Class<? extends ParameterOptionMeta>, Integer> options = new HashMap<>();
     private Servers.ServerType serverType;
 
     private final Set<Class<? extends MetricMeta>> metrics = new HashSet<>();
 
-    private ParameterOptionMeta alteringOption;
+    private Class<? extends ParameterOptionMeta> alteringOptionMeta;
     private int lowerBound;
     private int upperBound;
     private int delta;
@@ -41,12 +42,12 @@ public class TestOptions {
         this.serverType = serverType;
     }
 
-    public ParameterOptionMeta alteringOption() {
-        return alteringOption;
+    public Class<? extends ParameterOptionMeta> alteringOption() {
+        return alteringOptionMeta;
     }
 
-    public void setAlteringOption(final ParameterOptionMeta alteringOption) {
-        this.alteringOption = alteringOption;
+    public void setAlteringOptionMeta(final Class<? extends ParameterOptionMeta> alteringOptionMeta) {
+        this.alteringOptionMeta = alteringOptionMeta;
     }
 
     public int lowerBound() {
@@ -85,7 +86,7 @@ public class TestOptions {
         metrics.add(metric);
     }
 
-    public boolean requiresMetric(Class<? extends MetricMeta> metric) {
+    public boolean requiresMetric(final Class<? extends MetricMeta> metric) {
         return metrics.contains(metric);
     }
 
@@ -100,8 +101,18 @@ public class TestOptions {
      * @return string with error message or null if data was legal.
      */
     public String validate() {
+        if (serverType == null) {
+            return "Server type was not provided.";
+        }
+        if (alteringOptionMeta == null) {
+            return "Altering property was not provided.";
+        }
+        final ParameterOptionMeta alteringOption = Utils.getOptionInstance(alteringOptionMeta);
+        if (!alteringOption.mayAlter()) {
+            return "Option " + alteringOptionMeta.getSimpleName() + " cannot alter.";
+        }
         for (final Class<? extends ParameterOptionMeta> option : ServerTestInitializer.getRequiredOptions()) {
-            if (options.get(option) == null && alteringOption.getClass() != option) {
+            if (options.get(option) == null && alteringOptionMeta != option) {
                 return "Option " + option.getSimpleName() + " was not provided";
             }
         }
@@ -109,9 +120,6 @@ public class TestOptions {
             if (!ServerTestInitializer.getSupportedMetrics().contains(metric)) {
                 return "Metric " + metric.getSimpleName() + " is unsupported";
             }
-        }
-        if (alteringOption == null) {
-            return "No altering property was provided";
         }
         if (lowerBound > upperBound) {
             return "Min property value is greater then max value";
@@ -126,5 +134,13 @@ public class TestOptions {
             return "Delta must be positive";
         }
         return null;
+    }
+
+    public void print() {
+        for (final Map.Entry<Class<? extends ParameterOptionMeta>, Integer> meta : options.entrySet()) {
+            System.out.println(meta.getKey().getSimpleName() + " has value: " + meta.getValue());
+        }
+        System.out.println(alteringOption().getSimpleName() + " is altering from "
+                + lowerBound + " to " + upperBound + " with delta " + delta);
     }
 }

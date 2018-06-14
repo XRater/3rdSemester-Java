@@ -2,15 +2,15 @@ package com.mit.spbau.kirakosian.options.metrics.impl;
 
 import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
 
-public class ClientTime implements MetricMeta {
+public class TaskTime implements MetricMeta {
 
     @Override
     public String name() {
-        return "Client time";
+        return "Task time";
     }
 
     @Override
     public String description() {
-        return "Time elapsed between sending task and getting response";
+        return "Time for completing one task";
     }
 }

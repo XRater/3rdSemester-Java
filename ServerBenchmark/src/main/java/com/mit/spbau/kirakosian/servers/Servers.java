@@ -2,8 +2,10 @@ package com.mit.spbau.kirakosian.servers;
 
 public class Servers {
 
-    public static Server init(final ServerType type) {
+    public static Server createServer(final ServerType type) {
         switch (type) {
+            case Simple:
+                return null;
             case Blocking:
                 return null;
             case NonBlocking:
@@ -16,6 +18,6 @@ public class Servers {
     }
 
     public enum ServerType {
-        Blocking, NonBlocking
+        Simple, Blocking, NonBlocking
     }
 }

@@ -2,16 +2,16 @@ package com.mit.spbau.kirakosian.options.metrics.impl;
 
 import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
 
-public class QueryTime implements MetricMeta {
+public class ServerTime implements MetricMeta {
 
     //TODO
     @Override
     public String name() {
-        return "Query time";
+        return "Server time";
     }
 
     @Override
     public String description() {
-        return "Time required for query evaluation";
+        return "Time elapsed between getting task and sending answer";
     }
 }
