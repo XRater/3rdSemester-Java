@@ -36,7 +36,7 @@ public class ResultsScene extends Scene {
             final XYSeries series = new XYSeries(name);
 
             final MetricResult result = results.getResultsForMetric(meta);
-            for (final Map.Entry<Integer, Integer> entry : result.results().entrySet()) {
+            for (final Map.Entry<Integer, Number> entry : result.results().entrySet()) {
                 series.add(entry.getKey(), entry.getValue());
             }
 

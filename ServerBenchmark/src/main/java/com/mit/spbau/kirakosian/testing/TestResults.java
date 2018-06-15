@@ -24,7 +24,7 @@ public class TestResults {
         return options;
     }
 
-    public void addPoint(final Class<? extends MetricMeta> meta, final Integer parameter, final Integer value) {
+    public void addPoint(final Class<? extends MetricMeta> meta, final Integer parameter, final Number value) {
         if (results.containsKey(meta)) {
             results.get(meta).addResult(parameter, value);
         }

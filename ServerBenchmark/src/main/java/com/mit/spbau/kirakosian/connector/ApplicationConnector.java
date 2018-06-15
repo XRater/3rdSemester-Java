@@ -50,12 +50,17 @@ public class ApplicationConnector {
 
         int signal;
         signal = is.readInt();
-        if (signal == END_TEST_CASE) {
-            stats.done();
-        } else if (signal == CLIENT_TIME) {
-
-        } else {
-            throw new UnexpectedProtocolMessageException();
+        while (true) {
+            if (signal == END_TEST_CASE) {
+                stats.done();
+                break;
+            } else if (signal == CLIENT_TIME) {
+                final long time = is.readLong();
+                stats.timeForClientOnCient(time);
+            } else {
+                throw new UnexpectedProtocolMessageException();
+            }
+            signal = is.readInt();
         }
 
     }

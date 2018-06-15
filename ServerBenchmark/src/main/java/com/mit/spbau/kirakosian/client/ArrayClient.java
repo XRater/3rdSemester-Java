@@ -13,6 +13,7 @@ public class ArrayClient {
 
     final private DataOutputStream os;
     final private DataInputStream is;
+    private long time;
 
     public ArrayClient() throws IOException {
         Socket socket = new Socket("localhost", AbstractServer.PORT);
@@ -20,8 +21,12 @@ public class ArrayClient {
         is = new DataInputStream(socket.getInputStream());
     }
 
+    public long getTime() {
+        return time;
+    }
 
     public void work(final int queries, final int size, final int delay) throws IOException {
+        final long begin = System.currentTimeMillis();
         for (int i = 0; i < queries; i++) {
             final int[] array = Utils.generate(size);
 
@@ -30,7 +35,6 @@ public class ArrayClient {
             os.flush();
 
             final int[] result = Utils.readArray(is);
-//            System.out.println(Arrays.toString(result));
 
             try {
                 Thread.sleep(delay);
@@ -40,5 +44,7 @@ public class ArrayClient {
         }
         os.writeInt(STOP);
         os.flush();
+        final long end = System.currentTimeMillis();
+        time = end - begin;
     }
 }

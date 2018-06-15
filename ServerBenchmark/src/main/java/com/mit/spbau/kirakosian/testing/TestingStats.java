@@ -13,6 +13,8 @@ public class TestingStats implements ServerStatsListener {
     private int clientsProcessed;
 
     private List<Long> taskTimes = new ArrayList<>();
+    private List<Long> serverTimes = new ArrayList<>();
+    private List<Long> clientTimes = new ArrayList<>();
 
     public void clear() {
         clientsProcessed = 0;
@@ -27,6 +29,23 @@ public class TestingStats implements ServerStatsListener {
 
     public double getTaskTime() {
         return taskTimes.stream().mapToLong(e -> e).average().orElse(0);
+    }
+
+    public double getServerTime() {
+        return serverTimes.stream().mapToLong(e -> e).average().orElse(0);
+    }
+
+    public double getClientTime() {
+        return clientTimes.stream().mapToLong(e -> e).average().orElse(0);
+    }
+
+    public void timeForClientOnCient(final long time) {
+        clientTimes.add(time);
+    }
+
+    @Override
+    public void timeForClientOnServer(final long time) {
+        serverTimes.add(time);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.mit.spbau.kirakosian.testing;
 
 import com.mit.spbau.kirakosian.connector.ApplicationConnector;
 import com.mit.spbau.kirakosian.options.TestOptions;
+import com.mit.spbau.kirakosian.options.metrics.impl.ClientTime;
+import com.mit.spbau.kirakosian.options.metrics.impl.ServerTime;
 import com.mit.spbau.kirakosian.options.metrics.impl.TaskTime;
 import com.mit.spbau.kirakosian.servers.Server;
 import com.mit.spbau.kirakosian.servers.Servers;
@@ -50,7 +52,9 @@ class ServerTest {
     }
 
     private void updateResult(final TestResults results, final int value) {
-        results.addPoint(TaskTime.class, value, (int) stats.getTaskTime());
+        results.addPoint(TaskTime.class, value, stats.getTaskTime());
+        results.addPoint(ClientTime.class, value, stats.getClientTime());
+        results.addPoint(ServerTime.class, value, stats.getServerTime());
     }
 
 }

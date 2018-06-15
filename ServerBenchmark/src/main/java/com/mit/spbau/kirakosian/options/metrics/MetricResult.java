@@ -7,7 +7,7 @@ public class MetricResult {
 
     private final Class<? extends MetricMeta> meta;
 
-    private final Map<Integer, Integer> results = new HashMap<>();
+    private final Map<Integer, Number> results = new HashMap<>();
 
     public MetricResult(final Class<? extends MetricMeta> meta) {
         this.meta = meta;
@@ -17,11 +17,11 @@ public class MetricResult {
         return meta;
     }
 
-    public void addResult(final Integer parameter, final Integer value) {
+    public void addResult(final Integer parameter, final Number value) {
         results.put(parameter, value);
     }
 
-    public Map<Integer, Integer> results() {
+    public Map<Integer, Number> results() {
         return results;
     }
 }

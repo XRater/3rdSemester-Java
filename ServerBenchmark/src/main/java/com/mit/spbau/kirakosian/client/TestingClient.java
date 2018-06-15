@@ -7,7 +7,9 @@ import com.mit.spbau.kirakosian.options.TestOptions;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mit.spbau.kirakosian.connector.Protocol.*;
 
@@ -34,23 +36,26 @@ public class TestingClient {
                 throw new UnexpectedProtocolMessageException();
             }
 
-            final List<Thread> threads = new ArrayList<>();
+            final Map<Thread, ArrayClient> threads = new HashMap<>();
             for (int i = 0; i < options.clients(); i++) {
                 final ArrayClient client = new ArrayClient();
-                threads.add(new Thread(() -> {
+                threads.put(new Thread(() -> {
                     try {
                         client.work(options.queries(), options.arraySize(), options.delay());
                     } catch (final IOException e) {
                         // do nothing
                     }
-                }));
+                }), client);
             }
-            for (final Thread thread : threads) {
+            for (final Thread thread : threads.keySet()) {
                 thread.start();
             }
-            for (final Thread thread : threads) {
+            for (final Map.Entry<Thread, ArrayClient> entry : threads.entrySet()) {
                 try {
-                    thread.join();
+                    entry.getKey().join();
+                    os.writeInt(CLIENT_TIME);
+                    os.writeLong(entry.getValue().getTime());
+                    os.flush();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
