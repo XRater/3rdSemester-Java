@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.mit.spbau.kirakosian.Protocol.NEW_QUERY;
@@ -17,7 +18,7 @@ import static com.mit.spbau.kirakosian.Protocol.STOP;
 class Session {
 
     private final Executor writer = Executors.newSingleThreadExecutor();
-    private final Executor pool;
+    private final ExecutorService pool;
     private final ServerStatsListener listener;
 
     private final Socket socket;
@@ -51,7 +52,7 @@ class Session {
 
                 final long queryBegin = System.currentTimeMillis();
                 final int[] array = Utils.readArray(is);
-                pool.execute(new SortTask(array, queryBegin));
+                pool.submit(new SortTask(array, queryBegin));
 
                 signal = is.readInt();
             }

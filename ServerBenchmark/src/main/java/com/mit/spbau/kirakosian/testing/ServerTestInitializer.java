@@ -65,7 +65,7 @@ public class ServerTestInitializer {
         options.setDelta(1);
         options.setLowerBound(1);
         options.setUpperBound(10);
-        options.setServerType(Servers.ServerType.Simple);
+        options.setServerType(Servers.ServerType.NonBlocking);
 
         String error = options.validate();
         if (error != null) {

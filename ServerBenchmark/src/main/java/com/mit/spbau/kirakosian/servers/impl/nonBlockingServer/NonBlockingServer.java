@@ -5,8 +5,9 @@ import com.mit.spbau.kirakosian.servers.impl.AbstractServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NonBlockingServer extends AbstractServer {
 
@@ -17,10 +18,19 @@ public class NonBlockingServer extends AbstractServer {
     private Thread readingThread;
     private Thread writingThread;
 
+    private final Selector reader;
+    private final Selector writer;
+
+    private final ConcurrentLinkedQueue<Client> registerRead = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Client> registerWrite = new ConcurrentLinkedQueue<>();
+
     public NonBlockingServer() throws AbortException {
         try {
             server = ServerSocketChannel.open();
             server.bind(new InetSocketAddress(PORT));
+
+            reader = Selector.open();
+            writer = Selector.open();
         } catch (final IOException e) {
             throw new AbortException();
         }
@@ -40,30 +50,119 @@ public class NonBlockingServer extends AbstractServer {
     private void work() {
         while (working) {
             try {
-                final SocketChannel socket = server.accept();
-                processConnection(socket);
+                final SocketChannel channel = server.accept();
+                processConnection(channel);
             } catch (final IOException e) {
-                e.printStackTrace();
+                if (working) {
+                    listener.fail(e);
+                }
+                break;
             }
         }
 
-        if (!server.isOpen()) {
-            try {
-                server.close();
-            } catch (final IOException e) {
-                listener.fail(e);
-            }
-        }
+        closeAll();
     }
 
-    private void processConnection(final SocketChannel socket) {
+    private void processConnection(final SocketChannel channel) {
+        final Client client = new Client(channel, this);
+        try {
+            channel.configureBlocking(false);
+        } catch (final IOException e) {
+            listener.fail(e);
+        }
+        registerRead(client);
+    }
 
+    public void registerRead(final Client client) {
+        registerRead.add(client);
+        reader.wakeup();
+    }
+
+    public void registerWrite(final Client client) {
+        registerWrite.add(client);
+        writer.wakeup();
     }
 
     private void processRead() {
+        while (working) {
+            try {
+                while (!registerRead.isEmpty()) {
+                    final Client client = registerRead.poll();
+                    if (client == null) {
+                        continue;
+                    }
+                    client.getChannel().register(reader, SelectionKey.OP_READ, client);
+                }
+
+                final int ready = reader.select();
+                if (ready == 0) {
+                    continue;
+                }
+                final Iterator<SelectionKey> iterator = reader.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    final SelectionKey key = iterator.next();
+                    final Client client = (Client) key.attachment();
+                    client.onRead();
+                    iterator.remove();
+                }
+            } catch (final IOException e) {
+                if (working) {
+                    listener.fail(e);
+                }
+                break;
+            }
+        }
+
+        closeAll();
     }
 
     private void processWrite() {
+        while (working) {
+            try {
+                while (!registerWrite.isEmpty()) {
+                    final Client client = registerWrite.poll();
+                    if (client == null) {
+                        continue;
+                    }
+                    client.getChannel().register(reader, SelectionKey.OP_WRITE, client);
+                }
+
+                final int ready = writer.select();
+                if (ready == 0) {
+                    continue;
+                }
+                final Iterator<SelectionKey> iterator = writer.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    final SelectionKey key = iterator.next();
+                    final Client client = (Client) key.attachment();
+                    client.onWrite();
+                    iterator.remove();
+                }
+            } catch (final IOException e) {
+                if (working) {
+                    listener.fail(e);
+                }
+                break;
+            }
+        }
+
+        closeAll();
+    }
+
+    private void closeAll() {
+        if (working) {
+            working = false;
+            try {
+                reader.close();
+                writer.close();
+                server.close();
+                mainThread.join();
+                readingThread.join();
+                writingThread.join();
+            } catch (final IOException | InterruptedException e) {
+                listener.fail(e);
+            }
+        }
     }
 
     @Override
@@ -71,14 +170,6 @@ public class NonBlockingServer extends AbstractServer {
         if (!working) {
             return;
         }
-        working = false;
-        try {
-            server.close();
-            mainThread.join();
-            readingThread.join();
-            writingThread.join();
-        } catch (final IOException | InterruptedException e) {
-            listener.fail(e);
-        }
+        closeAll();
     }
 }

@@ -6,11 +6,12 @@ import com.mit.spbau.kirakosian.servers.impl.AbstractBlockingServer;
 
 import java.net.Socket;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BlockingServer extends AbstractBlockingServer {
 
-    private final Executor pool = Executors.newCachedThreadPool();
+    private final ExecutorService pool = Executors.newCachedThreadPool();
 
     public BlockingServer() throws AbortException {
         super();
@@ -21,7 +22,7 @@ public class BlockingServer extends AbstractBlockingServer {
         new Session(socket, this);
     }
 
-    public Executor getPool() {
+    public ExecutorService getPool() {
         return pool;
     }
 
