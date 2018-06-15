@@ -4,7 +4,6 @@ import com.mit.spbau.kirakosian.options.metrics.MetricMeta;
 
 public class ServerTime implements MetricMeta {
 
-    //TODO
     @Override
     public String name() {
         return "Server time";

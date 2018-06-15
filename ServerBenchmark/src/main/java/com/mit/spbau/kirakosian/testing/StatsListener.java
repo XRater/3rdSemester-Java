@@ -1,30 +1,32 @@
 package com.mit.spbau.kirakosian.testing;
 
-import com.mit.spbau.kirakosian.client.ArrayClient;
 import com.mit.spbau.kirakosian.servers.ServerStatsListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.LongStream;
 
-public class TestingStats implements ServerStatsListener {
+@SuppressWarnings("WeakerAccess")
+public class StatsListener implements ServerStatsListener {
 
-    private boolean isReady;
-    private int clientsProcessed;
+    private final List<Exception> errors = new ArrayList<>();
 
-    private List<Long> taskTimes = new ArrayList<>();
-    private List<Long> serverTimes = new ArrayList<>();
-    private List<Long> clientTimes = new ArrayList<>();
+    private final List<Long> taskTimes = new ArrayList<>();
+    private final List<Long> serverTimes = new ArrayList<>();
+    private final List<Long> clientTimes = new ArrayList<>();
 
     public void clear() {
-        clientsProcessed = 0;
-        isReady = false;
         taskTimes.clear();
+        serverTimes.clear();
+        clientTimes.clear();
+        errors.clear();
     }
 
-    public synchronized void done() {
-        isReady = true;
-        notify();
+    public boolean anyErrorsOccurred() {
+        return errors.size() != 0;
+    }
+
+    public List<Exception> getErrors() {
+        return errors;
     }
 
     public double getTaskTime() {
@@ -55,17 +57,7 @@ public class TestingStats implements ServerStatsListener {
 
     @Override
     public void fail(final Exception e) {
-        e.printStackTrace();
+        errors.add(e);
     }
 
-    // blocking method to wait until stats are ready
-    public synchronized void getReady() {
-        while (!isReady) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                // do noting
-            }
-        }
-    }
 }

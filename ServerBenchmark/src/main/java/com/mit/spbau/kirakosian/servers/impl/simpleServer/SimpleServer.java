@@ -1,6 +1,7 @@
 package com.mit.spbau.kirakosian.servers.impl.simpleServer;
 
 import com.mit.spbau.kirakosian.connector.UnexpectedProtocolMessageException;
+import com.mit.spbau.kirakosian.servers.exceptions.AbortException;
 import com.mit.spbau.kirakosian.servers.impl.AbstractBlockingServer;
 import com.mit.spbau.kirakosian.Utils;
 
@@ -12,7 +13,7 @@ import static com.mit.spbau.kirakosian.Protocol.STOP;
 
 public class SimpleServer extends AbstractBlockingServer {
 
-    public SimpleServer() throws IOException {
+    public SimpleServer() throws AbortException {
         super();
     }
 

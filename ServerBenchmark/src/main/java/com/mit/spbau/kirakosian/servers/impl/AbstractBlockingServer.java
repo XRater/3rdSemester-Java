@@ -1,6 +1,6 @@
 package com.mit.spbau.kirakosian.servers.impl;
 
-import com.mit.spbau.kirakosian.servers.impl.AbstractServer;
+import com.mit.spbau.kirakosian.servers.exceptions.AbortException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,8 +14,12 @@ public abstract class AbstractBlockingServer extends AbstractServer {
     private volatile boolean working;
     private Thread mainThread;
 
-    public AbstractBlockingServer() throws IOException {
-        server = new ServerSocket(PORT);
+    public AbstractBlockingServer() throws AbortException {
+        try {
+            server = new ServerSocket(PORT);
+        } catch (IOException e) {
+            throw new AbortException();
+        }
     }
 
     protected abstract void processConnection(final Socket socket);

@@ -1,19 +1,20 @@
 package com.mit.spbau.kirakosian.servers;
 
+import com.mit.spbau.kirakosian.servers.exceptions.AbortException;
+import com.mit.spbau.kirakosian.servers.impl.blockingServer.BlockingServer;
+import com.mit.spbau.kirakosian.servers.impl.nonBlockingServer.NonBlockingServer;
 import com.mit.spbau.kirakosian.servers.impl.simpleServer.SimpleServer;
-
-import java.io.IOException;
 
 public class Servers {
 
-    public static Server createServer(final ServerType type) throws IOException {
+    public static Server createServer(final ServerType type) throws AbortException {
         switch (type) {
             case Simple:
                 return new SimpleServer();
             case Blocking:
-                return null;
+                return new BlockingServer();
             case NonBlocking:
-                return null;
+                return new NonBlockingServer();
         }
         throw new UnknownServerTypeException();
     }

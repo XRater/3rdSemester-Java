@@ -27,7 +27,7 @@ public class Utils {
         for (int i = 0; i < array.length; i++) {
             for (int j = i; j < array.length; j++) {
                 if (array[i] > array[j]) {
-                    int tmp = array[j];
+                    final int tmp = array[j];
                     array[j] = array[i];
                     array[i] = tmp;
                 }
@@ -39,7 +39,7 @@ public class Utils {
         final Random random = new Random();
         final int array[] = new int[size];
         for (int i = 0; i < size; i++) {
-            array[i] = random.nextInt(size * size);
+            array[i] = random.nextInt();
         }
         return array;
     }

@@ -1,7 +1,7 @@
 package com.mit.spbau.kirakosian.connector;
 
 import com.mit.spbau.kirakosian.options.TestOptions;
-import com.mit.spbau.kirakosian.testing.TestingStats;
+import com.mit.spbau.kirakosian.testing.StatsListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,47 +21,79 @@ public class ApplicationConnector {
     private ObjectOutputStream os;
 
     private final TestOptions options;
-    private final TestingStats stats;
+    private final StatsListener stats;
 
-    public ApplicationConnector(final TestOptions options, final TestingStats stats) throws IOException {
+    public ApplicationConnector(final TestOptions options, final StatsListener stats) throws IOException {
         this.options = options;
         this.stats = stats;
         server = new ServerSocket(APPLICATION_PORT);
     }
 
     public void waitForNewClient() throws IOException {
-        socket = server.accept();
+        try {
+            socket = server.accept();
+        } catch (IOException e) {
+            try {
+                server.close();
+            } catch (IOException e1) {
+                // ignore error during close
+            }
+            throw e;
+        }
         processSocket(socket);
     }
 
     private void processSocket(final Socket socket) throws IOException {
-        is = new ObjectInputStream(socket.getInputStream());
-        os = new ObjectOutputStream(socket.getOutputStream());
+        try {
+            is = new ObjectInputStream(socket.getInputStream());
+            os = new ObjectOutputStream(socket.getOutputStream());
 
-        os.writeInt(OPTIONS);
-        os.writeObject(options);
-        os.flush();
+            os.writeInt(OPTIONS);
+            os.writeObject(options);
+            os.flush();
+        } catch (final IOException e) {
+            try {
+                closeAll();
+            } catch (final IOException e1) {
+                // ignore close exception
+            }
+            throw e;
+        }
+    }
 
+    private void closeAll() throws IOException {
+        is.close(); // try to close resources
+        os.close();
+        socket.close();
+        server.close();
     }
 
     public void startTestCase() throws IOException {
-        os.writeInt(START_TEST_CASE);
-        os.flush();
+        try {
+            os.writeInt(START_TEST_CASE);
+            os.flush();
 
-        int signal;
-        signal = is.readInt();
-        while (true) {
-            if (signal == END_TEST_CASE) {
-                stats.done();
-                break;
-            } else if (signal == CLIENT_TIME) {
-                final long time = is.readLong();
-                stats.timeForClientOnCient(time);
-            } else {
-                throw new UnexpectedProtocolMessageException();
-            }
+            int signal;
             signal = is.readInt();
+            while (true) {
+                if (signal == END_TEST_CASE) {
+                    stats.done();
+                    break;
+                } else if (signal == CLIENT_TIME) {
+                    final long time = is.readLong();
+                    stats.timeForClientOnCient(time);
+                } else {
+                    throw new UnexpectedProtocolMessageException();
+                }
+                signal = is.readInt();
+            }
+        } catch (final IOException e) {
+            try {
+                closeAll();
+            } catch (final IOException e1) {
+                // ignore close exception
+            }
+            throw e;
         }
-
     }
 }

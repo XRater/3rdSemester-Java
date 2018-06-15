@@ -6,9 +6,7 @@ import com.mit.spbau.kirakosian.options.TestOptions;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.mit.spbau.kirakosian.connector.Protocol.*;
@@ -54,7 +52,7 @@ public class TestingClient {
                 try {
                     entry.getKey().join();
                     os.writeInt(CLIENT_TIME);
-                    os.writeLong(entry.getValue().getTime());
+                    os.writeLong(entry.getValue().getTime() / options.queries());
                     os.flush();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

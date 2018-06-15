@@ -142,5 +142,6 @@ public class TestOptions implements Serializable {
         }
         System.out.println(alteringOption().getSimpleName() + " is altering from "
                 + lowerBound + " to " + upperBound + " with delta " + delta);
+        System.out.println("Server type is: " + serverType.name());
     }
 }

@@ -5,46 +5,54 @@ import com.mit.spbau.kirakosian.servers.impl.AbstractServer;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
 
 import static com.mit.spbau.kirakosian.Protocol.*;
 
-public class ArrayClient {
+class ArrayClient {
 
-    final private DataOutputStream os;
-    final private DataInputStream is;
     private long time;
+    private final Socket socket;
 
-    public ArrayClient() throws IOException {
-        Socket socket = new Socket("localhost", AbstractServer.PORT);
-        os = new DataOutputStream(socket.getOutputStream());
-        is = new DataInputStream(socket.getInputStream());
+    ArrayClient() throws IOException {
+        socket = new Socket("localhost", AbstractServer.PORT);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public long getTime() {
         return time;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void work(final int queries, final int size, final int delay) throws IOException {
-        final long begin = System.currentTimeMillis();
-        for (int i = 0; i < queries; i++) {
-            final int[] array = Utils.generate(size);
+        try (final DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+             final DataInputStream is = new DataInputStream(socket.getInputStream())) {
+            final long begin = System.currentTimeMillis();
+            for (int i = 0; i < queries; i++) {
+                final int[] array = Utils.generate(size);
 
-            os.writeInt(NEW_QUERY);
-            Utils.writeArray(os, array);
-            os.flush();
+                os.writeInt(NEW_QUERY);
+                Utils.writeArray(os, array);
+                os.flush();
 
-            final int[] result = Utils.readArray(is);
+                @SuppressWarnings("unused") final int[] result = Utils.readArray(is);
 
-            try {
-                Thread.sleep(delay);
-            } catch (final InterruptedException e) {
-                // TODO
+                try {
+                    Thread.sleep(delay);
+                } catch (final InterruptedException e) {
+                    // TODO
+                }
             }
+            os.writeInt(STOP);
+            os.flush();
+            final long end = System.currentTimeMillis();
+            time = end - begin;
+        } catch (final IOException e) {
+            try {
+                socket.close();
+            } catch (final IOException e1) {
+                // do nothing
+            }
+            throw e;
         }
-        os.writeInt(STOP);
-        os.flush();
-        final long end = System.currentTimeMillis();
-        time = end - begin;
     }
 }
