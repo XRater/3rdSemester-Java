@@ -10,7 +10,6 @@ import com.mit.spbau.kirakosian.servers.Servers;
 import com.mit.spbau.kirakosian.servers.exceptions.AbortException;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 class ServerTest {
 
@@ -28,9 +27,9 @@ class ServerTest {
         stats.clear();
 
         // wait for second application
-//        final ApplicationConnector connector = new ApplicationConnector(options, stats); // lethal error
-//        connector.waitForNewClient(); // lethal error
-//        System.out.println("Starting");
+        final ApplicationConnector connector = new ApplicationConnector(options, stats); // lethal error
+        connector.waitForNewClient(); // lethal error
+        System.out.println("Starting");
 
         for (int currentValue = options.lowerBound();
              currentValue <= options.upperBound();
@@ -47,7 +46,7 @@ class ServerTest {
             server.start();
 
             System.out.println("Test case " + currentValue);
-//            connector.startTestCase(); // lethal error
+            connector.startTestCase(); // lethal error
 
             server.shutDown();
             updateResult(results, currentValue);

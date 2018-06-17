@@ -50,6 +50,7 @@ public class ServerTestInitializer {
         try {
             serverTest.startTest(results);
         } catch (final IOException e) {
+            e.printStackTrace();
             Controller.cancel();
         }
 
@@ -59,11 +60,11 @@ public class ServerTestInitializer {
     public static void main(String[] args) {
         final TestOptions options = new TestOptions();
         options.setAlteringOptionMeta(ClientsNumber.class);
-        options.setOption(QueriesNumber.class, 10);
-        options.setOption(ArraySize.class, 10000);
-        options.setOption(Delay.class, 10);
+        options.setOption(QueriesNumber.class, 20);
+        options.setOption(ArraySize.class, 10);
+        options.setOption(Delay.class, 0);
         options.setDelta(1);
-        options.setLowerBound(1);
+        options.setLowerBound(10);
         options.setUpperBound(10);
         options.setServerType(Servers.ServerType.NonBlocking);
 

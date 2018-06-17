@@ -1,5 +1,6 @@
 package com.mit.spbau.kirakosian.servers.impl.nonBlockingServer;
 
+import com.mit.spbau.kirakosian.servers.ServerStatsListener;
 import com.mit.spbau.kirakosian.servers.exceptions.AbortException;
 import com.mit.spbau.kirakosian.servers.impl.AbstractServer;
 
@@ -8,7 +9,10 @@ import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+@SuppressWarnings("WeakerAccess")
 public class NonBlockingServer extends AbstractServer {
 
     private volatile boolean working = true;
@@ -17,12 +21,15 @@ public class NonBlockingServer extends AbstractServer {
     private Thread mainThread;
     private Thread readingThread;
     private Thread writingThread;
+    private final ExecutorService pool = Executors.newCachedThreadPool();
 
     private final Selector reader;
     private final Selector writer;
 
     private final ConcurrentLinkedQueue<Client> registerRead = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<Client> registerWrite = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Client> unregisterRead = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Client> unregisterWrite = new ConcurrentLinkedQueue<>();
 
     public NonBlockingServer() throws AbortException {
         try {
@@ -83,6 +90,16 @@ public class NonBlockingServer extends AbstractServer {
         writer.wakeup();
     }
 
+    public void unregisterRead(final Client client) {
+        unregisterRead.add(client);
+        reader.wakeup();
+    }
+
+    public void unregisterWrite(final Client client) {
+        unregisterWrite.add(client);
+        writer.wakeup();
+    }
+
     private void processRead() {
         while (working) {
             try {
@@ -92,6 +109,13 @@ public class NonBlockingServer extends AbstractServer {
                         continue;
                     }
                     client.getChannel().register(reader, SelectionKey.OP_READ, client);
+                }
+                while (!unregisterRead.isEmpty()) {
+                    final Client client = unregisterRead.poll();
+                    if (client == null) {
+                        continue;
+                    }
+                    client.getChannel().keyFor(reader).cancel();
                 }
 
                 final int ready = reader.select();
@@ -124,7 +148,14 @@ public class NonBlockingServer extends AbstractServer {
                     if (client == null) {
                         continue;
                     }
-                    client.getChannel().register(reader, SelectionKey.OP_WRITE, client);
+                    client.getChannel().register(writer, SelectionKey.OP_WRITE, client);
+                }
+                while (!unregisterWrite.isEmpty()) {
+                    final Client client = unregisterWrite.poll();
+                    if (client == null) {
+                        continue;
+                    }
+                    client.getChannel().keyFor(writer).cancel();
                 }
 
                 final int ready = writer.select();
@@ -171,5 +202,13 @@ public class NonBlockingServer extends AbstractServer {
             return;
         }
         closeAll();
+    }
+
+    public ServerStatsListener listener() {
+        return listener;
+    }
+
+    public ExecutorService pool() {
+        return pool;
     }
 }
