@@ -6,7 +6,7 @@ public class ArraySize implements ParameterOptionMeta {
 
     @Override
     public String name() {
-        return "Array arraySize";
+        return "Array size";
     }
 
     @Override

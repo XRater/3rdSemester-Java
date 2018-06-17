@@ -19,9 +19,8 @@ public class ResultsScene extends Scene {
 
     public void acceptResults(final TestResults results) {
         final Class<? extends MetricMeta> meta = results.options().metrics().iterator().next();
-        System.out.println(meta.getSimpleName());
-        final JFreeChart xyLineChart = ChartFactory.createXYLineChart("Results for Ну ",
-                "Years","Number of Schools",
+        final JFreeChart xyLineChart = ChartFactory.createXYLineChart("",
+                Utils.getOptionInstance(results.options().alteringOption()).name(), "Time",
                 makeDataset(results),
                 PlotOrientation.VERTICAL,
                 true,true,false);
