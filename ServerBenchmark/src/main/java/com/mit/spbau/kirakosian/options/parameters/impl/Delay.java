@@ -28,4 +28,9 @@ public class Delay implements ParameterOptionMeta {
     public boolean mayAlter() {
         return true;
     }
+
+    @Override
+    public String shortName() {
+        return "D";
+    }
 }

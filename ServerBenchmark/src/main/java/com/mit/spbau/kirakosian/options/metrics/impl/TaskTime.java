@@ -13,4 +13,9 @@ public class TaskTime implements MetricMeta {
     public String description() {
         return "Time for completing one task";
     }
+
+    @Override
+    public String shortName() {
+        return "T";
+    }
 }

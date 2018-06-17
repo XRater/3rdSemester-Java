@@ -30,8 +30,8 @@ public class UIOptions {
     private static final List<Class<? extends MetricMeta>> metrics = new ArrayList<>();
 
     static {
-//        serverTypes.sendNewMessage(Servers.ServerType.Simple);
-//        serverTypes.sendNewMessage(Servers.ServerType.Blocking);
+        serverTypes.add(Servers.ServerType.Simple);
+        serverTypes.add(Servers.ServerType.Blocking);
         serverTypes.add(Servers.ServerType.NonBlocking);
 
         metrics.add(ServerTime.class);

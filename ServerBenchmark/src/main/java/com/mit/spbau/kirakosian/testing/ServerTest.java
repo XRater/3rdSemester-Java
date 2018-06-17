@@ -59,14 +59,20 @@ class ServerTest {
     private void updateResult(final TestResults results, final int value) {
         if (stats.anyErrorsOccurred()) {
             System.out.println("Test case was skipped cause errors");
-            for (Exception e : stats.getErrors()) {
+            for (final Exception e : stats.getErrors()) {
                 e.printStackTrace();
             }
             return;
         }
-        results.addPoint(TaskTime.class, value, stats.getTaskTime());
-        results.addPoint(ClientTime.class, value, stats.getClientTime());
-        results.addPoint(ServerTime.class, value, stats.getServerTime());
+        if (options.requiresMetric(TaskTime.class)) {
+            results.addPoint(TaskTime.class, value, stats.getTaskTime());
+        }
+        if (options.requiresMetric(ClientTime.class)) {
+            results.addPoint(ClientTime.class, value, stats.getClientTime());
+        }
+        if (options.requiresMetric(ServerTime.class)) {
+            results.addPoint(ServerTime.class, value, stats.getServerTime());
+        }
     }
 
 }

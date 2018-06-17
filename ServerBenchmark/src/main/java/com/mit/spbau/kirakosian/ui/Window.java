@@ -22,7 +22,7 @@ public class Window extends JFrame {
     }
 
 
-    public void setScene(final Scene scene) {
+    void setScene(final Scene scene) {
         currentScene.setVisible(false);
         scene.setVisible(true);
         setContentPane(scene);

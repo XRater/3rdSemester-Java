@@ -5,6 +5,7 @@ import com.mit.spbau.kirakosian.connector.UnexpectedProtocolMessageException;
 import com.mit.spbau.kirakosian.options.TestOptions;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +18,11 @@ public class TestingClient {
     final private ObjectOutputStream os;
     final private ObjectInputStream is;
 
-    private TestingClient() throws IOException, ClassNotFoundException {
-        final Socket socket = new Socket("localhost", ApplicationConnector.APPLICATION_PORT);
+    private final String ip;
+
+    private TestingClient(final String ip) throws IOException, ClassNotFoundException {
+        final Socket socket = new Socket(InetAddress.getByName(ip), ApplicationConnector.APPLICATION_PORT);
+        this.ip = ip;
         os = new ObjectOutputStream(socket.getOutputStream());
         is = new ObjectInputStream(socket.getInputStream());
         if (is.readInt() != OPTIONS)  {
@@ -36,7 +40,7 @@ public class TestingClient {
 
             final Map<Thread, ArrayClient> threads = new HashMap<>();
             for (int i = 0; i < options.clients(); i++) {
-                final ArrayClient client = new ArrayClient();
+                final ArrayClient client = new ArrayClient(ip);
                 threads.put(new Thread(() -> {
                     try {
                         client.work(options.queries(), options.arraySize(), options.delay());
@@ -54,7 +58,7 @@ public class TestingClient {
                     os.writeInt(CLIENT_TIME);
                     os.writeLong(entry.getValue().getTime() / options.queries());
                     os.flush();
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -66,7 +70,13 @@ public class TestingClient {
     }
 
     public static void main(final String[] args) throws IOException, ClassNotFoundException {
-        final TestingClient client = new TestingClient();
+        final String ip;
+        if (args.length == 0) {
+            ip = "127.0.0.1";
+        } else {
+            ip = args[0];
+        }
+        final TestingClient client = new TestingClient(ip);
         client.startTest();
     }
 

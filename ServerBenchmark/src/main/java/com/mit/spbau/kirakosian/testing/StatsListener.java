@@ -41,7 +41,7 @@ public class StatsListener implements ServerStatsListener {
         return clientTimes.stream().mapToLong(e -> e).average().orElse(0);
     }
 
-    public void timeForClientOnCient(final long time) {
+    public void timeForClientOnClient(final long time) {
         clientTimes.add(time);
     }
 

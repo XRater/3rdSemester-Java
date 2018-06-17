@@ -78,6 +78,7 @@ public class NonBlockingServer extends AbstractServer {
             listener.fail(e);
         }
         registerRead(client);
+        registerWrite(client);
     }
 
     public void registerRead(final Client client) {

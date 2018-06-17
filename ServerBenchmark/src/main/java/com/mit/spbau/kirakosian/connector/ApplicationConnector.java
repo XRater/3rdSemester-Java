@@ -81,7 +81,7 @@ public class ApplicationConnector {
                     break;
                 } else if (signal == CLIENT_TIME) {
                     final long time = is.readLong();
-                    stats.timeForClientOnCient(time);
+                    stats.timeForClientOnClient(time);
                 } else {
                     throw new UnexpectedProtocolMessageException();
                 }

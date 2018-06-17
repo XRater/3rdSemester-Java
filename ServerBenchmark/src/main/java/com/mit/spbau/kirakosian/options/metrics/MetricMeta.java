@@ -5,4 +5,6 @@ public interface MetricMeta {
     String name();
 
     String description();
+
+    String shortName();
 }

@@ -7,12 +7,14 @@ import javax.swing.*;
 
 public class Controller {
 
-    public static void calculationsCompleted(TestResults results) {
+    public static void calculationsCompleted(final TestResults results) {
+        ResultsWriter.saveResults(results);
         SceneManager.RESULTS_SCENE.acceptResults(results);
         SwingUtilities.invokeLater(() -> SceneManager.setScene(SceneManager.RESULTS_SCENE));
     }
 
     public static void cancel() {
-
+        SwingUtilities.invokeLater(() -> SceneManager.setScene(SceneManager.SETTINGS_SCENE));
     }
+
 }

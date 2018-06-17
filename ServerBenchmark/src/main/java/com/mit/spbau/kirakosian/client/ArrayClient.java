@@ -4,6 +4,7 @@ import com.mit.spbau.kirakosian.Utils;
 import com.mit.spbau.kirakosian.servers.impl.AbstractServer;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 import static com.mit.spbau.kirakosian.Protocol.*;
@@ -13,8 +14,8 @@ class ArrayClient {
     private long time;
     private final Socket socket;
 
-    ArrayClient() throws IOException {
-        socket = new Socket("localhost", AbstractServer.PORT);
+    ArrayClient(final String ip) throws IOException {
+        socket = new Socket(InetAddress.getByName(ip), AbstractServer.PORT);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -39,7 +40,7 @@ class ArrayClient {
                 try {
                     Thread.sleep(delay);
                 } catch (final InterruptedException e) {
-                    // TODO
+                    // unlucky
                 }
             }
             os.writeInt(STOP);

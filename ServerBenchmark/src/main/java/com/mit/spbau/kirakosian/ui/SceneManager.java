@@ -1,6 +1,5 @@
 package com.mit.spbau.kirakosian.ui;
 
-import com.mit.spbau.kirakosian.testing.TestResults;
 import com.mit.spbau.kirakosian.ui.scenes.InitialScene;
 import com.mit.spbau.kirakosian.ui.scenes.ResultsScene;
 import com.mit.spbau.kirakosian.ui.scenes.SettingsScene;

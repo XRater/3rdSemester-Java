@@ -34,8 +34,7 @@ public class SettingsScene extends Scene {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-//            String error = testOptions.validate();
-            String error = null;
+            final String error = testOptions.validate();
             if (error != null) {
                 JOptionPane.showMessageDialog(null,
                         "Error: " + error, "Error Message",

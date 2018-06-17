@@ -33,11 +33,12 @@ public class Client {
         writing.flip();
     }
 
-    public void onWrite() {
+    public void onWrite() throws IOException {
         synchronized (writing) {
             if (state != State.WRITING) {
                 return;
             }
+            channel.write(writing);
             processWroteInfo();
         }
     }
@@ -114,7 +115,6 @@ public class Client {
             final long end = System.currentTimeMillis();
             server.listener().timeForTask(end - begin);
             sendNewMessage(innerArray);
-            server.registerWrite(Client.this);
             state = State.WRITING;
         }
     }

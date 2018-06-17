@@ -13,4 +13,9 @@ public class ServerTime implements MetricMeta {
     public String description() {
         return "Time elapsed between getting task and sending answer";
     }
+
+    @Override
+    public String shortName() {
+        return "S";
+    }
 }

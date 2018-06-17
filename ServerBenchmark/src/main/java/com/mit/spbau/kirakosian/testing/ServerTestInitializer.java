@@ -11,6 +11,7 @@ import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.QueriesNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.Delay;
+import com.mit.spbau.kirakosian.servers.Server;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.io.IOException;
@@ -57,18 +58,22 @@ public class ServerTestInitializer {
         Controller.calculationsCompleted(results);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         final TestOptions options = new TestOptions();
         options.setAlteringOptionMeta(ClientsNumber.class);
-        options.setOption(QueriesNumber.class, 20);
-        options.setOption(ArraySize.class, 10);
+        options.setOption(QueriesNumber.class, 40);
+        options.setOption(ArraySize.class, 1000);
         options.setOption(Delay.class, 0);
         options.setDelta(1);
-        options.setLowerBound(10);
-        options.setUpperBound(10);
-        options.setServerType(Servers.ServerType.NonBlocking);
+        options.setLowerBound(1);
+        options.setUpperBound(20);
+        options.setServerType(Servers.ServerType.Simple);
 
-        String error = options.validate();
+        options.addMetric(TaskTime.class);
+        options.addMetric(ClientTime.class);
+        options.addMetric(ServerTime.class);
+
+        final String error = options.validate();
         if (error != null) {
             System.out.println(error);
             return;

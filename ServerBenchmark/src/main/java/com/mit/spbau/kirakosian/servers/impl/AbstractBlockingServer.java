@@ -17,7 +17,7 @@ public abstract class AbstractBlockingServer extends AbstractServer {
     public AbstractBlockingServer() throws AbortException {
         try {
             server = new ServerSocket(PORT);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new AbortException();
         }
     }

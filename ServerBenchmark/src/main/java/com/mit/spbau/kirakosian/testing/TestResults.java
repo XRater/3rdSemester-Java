@@ -7,6 +7,7 @@ import com.mit.spbau.kirakosian.options.metrics.MetricResult;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public class TestResults {
 
     private final Map<Class<? extends MetricMeta>, MetricResult> results = new HashMap<>();

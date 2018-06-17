@@ -11,4 +11,6 @@ public interface ParameterOptionMeta {
     String description();
 
     boolean mayAlter();
+
+    String shortName();
 }

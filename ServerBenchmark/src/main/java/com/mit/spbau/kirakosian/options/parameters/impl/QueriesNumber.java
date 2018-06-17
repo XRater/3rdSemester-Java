@@ -16,16 +16,21 @@ public class QueriesNumber implements ParameterOptionMeta {
 
     @Override
     public int minValue() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int maxValue() {
-        return 100;
+        return 53;
     }
 
     @Override
     public boolean mayAlter() {
         return false;
+    }
+
+    @Override
+    public String shortName() {
+        return "Q";
     }
 }

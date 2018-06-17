@@ -28,4 +28,9 @@ public class ClientsNumber implements ParameterOptionMeta {
     public boolean mayAlter() {
         return true;
     }
+
+    @Override
+    public String shortName() {
+        return "C   ";
+    }
 }

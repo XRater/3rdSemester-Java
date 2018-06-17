@@ -1,6 +1,5 @@
 package com.mit.spbau.kirakosian;
 
-import com.google.common.primitives.Ints;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.commons.io.input.BoundedInputStream;
 
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("WeakerAccess")
 public class Utils {
 
     public static void writeArray(final DataOutputStream os, final int[] array) throws IOException {
@@ -21,9 +21,8 @@ public class Utils {
 
     public static int[] readArray(final DataInputStream is) throws IOException {
         final int size = is.readInt();
-        final byte[] array = new byte[size];
-        is.read(array);
-        return listToArray(ArrayMessage.Array.parseFrom(array).getDataList());
+        final BoundedInputStream bis = new BoundedInputStream(is, size);
+        return listToArray(ArrayMessage.Array.parseFrom(bis).getDataList());
     }
 
     public static int[] getArray(final byte[] array) throws InvalidProtocolBufferException {

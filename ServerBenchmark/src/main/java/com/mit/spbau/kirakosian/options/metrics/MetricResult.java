@@ -1,13 +1,13 @@
 package com.mit.spbau.kirakosian.options.metrics;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MetricResult {
 
     private final Class<? extends MetricMeta> meta;
 
-    private final Map<Integer, Number> results = new HashMap<>();
+    private final Map<Integer, Number> results = new TreeMap<>();
 
     public MetricResult(final Class<? extends MetricMeta> meta) {
         this.meta = meta;

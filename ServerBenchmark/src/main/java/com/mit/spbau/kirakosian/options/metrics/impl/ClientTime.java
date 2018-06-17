@@ -13,4 +13,9 @@ public class ClientTime implements MetricMeta {
     public String description() {
         return "Time elapsed between sending task and getting response";
     }
+
+    @Override
+    public String shortName() {
+        return "C";
+    }
 }
