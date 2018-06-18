@@ -11,7 +11,6 @@ import com.mit.spbau.kirakosian.options.parameters.impl.ArraySize;
 import com.mit.spbau.kirakosian.options.parameters.impl.ClientsNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.QueriesNumber;
 import com.mit.spbau.kirakosian.options.parameters.impl.Delay;
-import com.mit.spbau.kirakosian.servers.Server;
 import com.mit.spbau.kirakosian.servers.Servers;
 
 import java.io.IOException;
@@ -47,6 +46,21 @@ public class ServerTestInitializer {
     public static void startTest(final TestOptions options) {
         options.setServerType(Servers.ServerType.Simple);
         options.print();
+        final ServerTest serverTest = new ServerTest(options);
+        final TestResults results = new TestResults(options);
+        try {
+            serverTest.startTest(results);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            Controller.cancel();
+        }
+
+        Controller.calculationsCompleted(results);
+    }
+
+    public static void startTestDebug(final TestOptions options) {
+        options.setServerType(Servers.ServerType.Simple);
+        options.print();
         ServerTest serverTest = new ServerTest(options);
         TestResults results = new TestResults(options);
         try {
@@ -56,7 +70,7 @@ public class ServerTestInitializer {
             Controller.cancel();
         }
 
-        Controller.calculationsCompleted(results);
+        Controller.calculationsCompletedDebug(results);
 
         options.setServerType(Servers.ServerType.Blocking);
         options.print();
@@ -69,7 +83,7 @@ public class ServerTestInitializer {
             Controller.cancel();
         }
 
-        Controller.calculationsCompleted(results);
+        Controller.calculationsCompletedDebug(results);
 
         options.setServerType(Servers.ServerType.NonBlocking);
         options.print();
@@ -82,31 +96,59 @@ public class ServerTestInitializer {
             Controller.cancel();
         }
 
-        Controller.calculationsCompleted(results);
+        Controller.calculationsCompletedDebug(results);
 
     }
 
     public static void main(final String[] args) {
         final TestOptions options = new TestOptions();
-        options.setAlteringOptionMeta(ClientsNumber.class);
-        options.setOption(QueriesNumber.class, 40);
-        options.setOption(ArraySize.class, 1000);
-        options.setOption(Delay.class, 0);
-        options.setDelta(1);
-        options.setLowerBound(1);
-        options.setUpperBound(20);
+        options.setAlteringOptionMeta(ArraySize.class);
+        options.setOption(QueriesNumber.class, 25);
+        options.setOption(ArraySize.class, 5000);
+        options.setOption(ClientsNumber.class, 25);
+        options.setOption(Delay.class, 200);
+        options.setDelta(1000);
+        options.setLowerBound(1000);
+        options.setUpperBound(10000);
         options.setServerType(Servers.ServerType.Simple);
 
         options.addMetric(TaskTime.class);
         options.addMetric(ClientTime.class);
         options.addMetric(ServerTime.class);
 
-        final String error = options.validate();
+        String error = options.validate();
         if (error != null) {
             System.out.println(error);
             return;
         }
 
-        startTest(options);
+        startTestDebug(options);
+
+        options.setAlteringOptionMeta(ClientsNumber.class);
+        options.setDelta(10);
+        options.setLowerBound(10);
+        options.setUpperBound(100);
+
+        error = options.validate();
+        if (error != null) {
+            System.out.println(error);
+            return;
+        }
+
+        startTestDebug(options);
+
+        options.setAlteringOptionMeta(Delay.class);
+        options.setDelta(100);
+        options.setLowerBound(0);
+        options.setUpperBound(900);
+
+        error = options.validate();
+        if (error != null) {
+            System.out.println(error);
+            return;
+        }
+
+        startTestDebug(options);
+
     }
 }
