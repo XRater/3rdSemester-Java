@@ -45,9 +45,10 @@ public class ServerTestInitializer {
     }
 
     public static void startTest(final TestOptions options) {
+        options.setServerType(Servers.ServerType.Simple);
         options.print();
-        final ServerTest serverTest = new ServerTest(options);
-        final TestResults results = new TestResults(options);
+        ServerTest serverTest = new ServerTest(options);
+        TestResults results = new TestResults(options);
         try {
             serverTest.startTest(results);
         } catch (final IOException e) {
@@ -56,6 +57,33 @@ public class ServerTestInitializer {
         }
 
         Controller.calculationsCompleted(results);
+
+        options.setServerType(Servers.ServerType.Blocking);
+        options.print();
+        serverTest = new ServerTest(options);
+        results = new TestResults(options);
+        try {
+            serverTest.startTest(results);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            Controller.cancel();
+        }
+
+        Controller.calculationsCompleted(results);
+
+        options.setServerType(Servers.ServerType.NonBlocking);
+        options.print();
+        serverTest = new ServerTest(options);
+        results = new TestResults(options);
+        try {
+            serverTest.startTest(results);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            Controller.cancel();
+        }
+
+        Controller.calculationsCompleted(results);
+
     }
 
     public static void main(final String[] args) {

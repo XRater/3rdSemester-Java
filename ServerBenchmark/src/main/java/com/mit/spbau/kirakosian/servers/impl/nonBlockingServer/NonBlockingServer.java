@@ -21,7 +21,7 @@ public class NonBlockingServer extends AbstractServer {
     private Thread mainThread;
     private Thread readingThread;
     private Thread writingThread;
-    private final ExecutorService pool = Executors.newCachedThreadPool();
+    private final ExecutorService pool = Executors.newFixedThreadPool(3);
 
     private final Selector reader;
     private final Selector writer;
@@ -62,6 +62,7 @@ public class NonBlockingServer extends AbstractServer {
             } catch (final IOException e) {
                 if (working) {
                     listener.fail(e);
+                    break;
                 }
                 break;
             }
@@ -133,6 +134,7 @@ public class NonBlockingServer extends AbstractServer {
             } catch (final IOException e) {
                 if (working) {
                     listener.fail(e);
+                    break;
                 }
                 break;
             }
@@ -173,6 +175,7 @@ public class NonBlockingServer extends AbstractServer {
             } catch (final IOException e) {
                 if (working) {
                     listener.fail(e);
+                    break;
                 }
                 break;
             }

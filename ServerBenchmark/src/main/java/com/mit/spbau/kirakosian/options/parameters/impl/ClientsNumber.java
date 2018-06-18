@@ -21,7 +21,7 @@ public class ClientsNumber implements ParameterOptionMeta {
 
     @Override
     public int maxValue() {
-        return 41;
+        return 101;
     }
 
     @Override

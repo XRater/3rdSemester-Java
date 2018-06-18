@@ -36,8 +36,6 @@ def build_plot(metric, param):
 
     for i in range(len(servers)):
         xs, ys = get_data(i, metric, param)
-        print(xs)
-        print(ys)
         x_coord = np.linspace(min(xs), max(xs))
         y_coord = interpolate.spline(xs, ys, x_coord)
 

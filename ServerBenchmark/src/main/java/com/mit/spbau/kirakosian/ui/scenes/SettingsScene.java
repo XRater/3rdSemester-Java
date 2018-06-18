@@ -22,7 +22,7 @@ public class SettingsScene extends Scene {
 
     public SettingsScene() {
         super();
-        final JButton startButton = new JButton("Start server startTest");
+        final JButton startButton = new JButton("Run server test");
         startButton.addActionListener(e ->
         {
             final TestOptions testOptions;

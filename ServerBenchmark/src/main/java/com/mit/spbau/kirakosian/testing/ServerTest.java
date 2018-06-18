@@ -54,6 +54,7 @@ class ServerTest {
         }
 
         System.out.println("End of testing");
+        connector.close();
     }
 
     private void updateResult(final TestResults results, final int value) {

@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 @SuppressWarnings("WeakerAccess")
 public class BlockingServer extends AbstractBlockingServer {
 
-    private final ExecutorService pool = Executors.newCachedThreadPool();
+    private final ExecutorService pool = Executors.newFixedThreadPool(3);
 
     public BlockingServer() throws AbortException {
         super();

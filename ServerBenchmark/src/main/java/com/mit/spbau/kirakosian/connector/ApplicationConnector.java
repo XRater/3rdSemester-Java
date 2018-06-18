@@ -96,4 +96,8 @@ public class ApplicationConnector {
             throw e;
         }
     }
+
+    public void close() throws IOException {
+        closeAll();
+    }
 }
